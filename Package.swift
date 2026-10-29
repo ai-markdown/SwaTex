@@ -53,7 +53,8 @@ let package = Package(
             name: "SwaTexTests",
             dependencies: ["SwaTex"],
             resources: [
-                .copy("Resources/golden")
+                .copy("Resources/golden"),
+                .copy("Resources/differential"),
             ]
         ),
         .testTarget(
