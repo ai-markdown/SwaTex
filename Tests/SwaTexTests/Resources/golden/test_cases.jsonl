@@ -23,7 +23,7 @@
 {"box":{"depth":0.05556,"height":0.75,"width":0.5},"displayList":{"depth":0.05556,"height":0.75,"itemCount":1,"width":0.5},"input":"\\text{\\textdollar}"}
 {"box":{"depth":0.0,"height":0.69444,"width":0.5},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":0.5},"input":"\\text{\\`{a}}"}
 {"box":{"depth":0.0,"height":0.94677,"width":0.75},"displayList":{"depth":0.0,"height":0.94677,"itemCount":2,"width":0.75},"input":"\\text{\\AA}"}
-{"box":{"depth":0.0,"height":0.69444,"width":0.5},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":0.75},"input":"\\text{\\aa}"}
+{"box":{"depth":0.0,"height":0.69444,"width":0.5},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":0.5},"input":"\\text{\\aa}"}
 {"box":{"depth":1.22777,"height":1.38056,"width":2.39139},"displayList":{"depth":1.22777,"height":1.38056,"itemCount":5,"width":2.39139},"input":"{a \\above{2pt} b+1}"}
 {"box":{"depth":0.0,"height":0.69444,"width":0.46563},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":0.46563},"input":"\\acute e"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.90278},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.90278},"input":"\\text{\\AE}"}
@@ -31,12 +31,12 @@
 {"box":{"depth":0.0,"height":0.69444,"width":0.61111},"displayList":{"depth":0.0,"height":0.69444,"itemCount":1,"width":0.61111},"input":"\\alef"}
 {"box":{"depth":0.0,"height":0.69444,"width":0.61111},"displayList":{"depth":0.0,"height":0.69444,"itemCount":1,"width":0.61111},"input":"\\alefsym"}
 {"box":{"depth":0.0,"height":0.69444,"width":0.61111},"displayList":{"depth":0.0,"height":0.69444,"itemCount":1,"width":0.61111},"input":"\\aleph"}
-{"box":{"depth":1.25,"height":1.75,"width":5.57028},"displayList":{"depth":1.25,"height":1.75,"itemCount":10,"width":5.57028},"input":"\\begin{align*} a&=b+c \\\\ d+e&=f \\end{align*}"}
-{"box":{"depth":1.25,"height":1.75,"width":5.57028},"displayList":{"depth":1.25,"height":1.75,"itemCount":10,"width":5.57028},"input":"\\begin{align*} a&=b+c \\\\ d+e&=f \\end{align*}"}
-{"box":{"depth":1.25,"height":1.75,"width":5.57028},"displayList":{"depth":1.25,"height":1.75,"itemCount":10,"width":5.57028},"input":"\\begin{aligned} a&=b+c \\\\ d+e&=f \\end{aligned}"}
-{"box":{"depth":1.25,"height":1.75,"width":5.48658},"displayList":{"depth":1.25,"height":1.75,"itemCount":16,"width":5.48658},"input":"\\begin{alignat*}{2} 10&x+ &3&y = 2 \\\\ 3&x+&13&y = 4 \\end{alignat*}"}
-{"box":{"depth":1.25,"height":1.75,"width":5.48658},"displayList":{"depth":1.25,"height":1.75,"itemCount":16,"width":5.48658},"input":"\\begin{alignat*}{2} 10&x+ &3&y = 2 \\\\ 3&x+&13&y = 4 \\end{alignat*}"}
-{"box":{"depth":1.25,"height":1.75,"width":5.48658},"displayList":{"depth":1.25,"height":1.75,"itemCount":16,"width":5.48658},"input":"\\begin{alignedat}{2} 10&x+ &3&y = 2 \\\\ 3&x+&13&y = 4 \\end{alignedat}"}
+{"box":{"depth":1.1,"height":1.6,"width":5.62583},"displayList":{"depth":1.1,"height":1.6,"itemCount":10,"width":5.62583},"input":"\\begin{align*} a&=b+c \\\\ d+e&=f \\end{align*}"}
+{"box":{"depth":1.1,"height":1.6,"width":5.62583},"displayList":{"depth":1.1,"height":1.6,"itemCount":10,"width":5.62583},"input":"\\begin{align*} a&=b+c \\\\ d+e&=f \\end{align*}"}
+{"box":{"depth":1.1,"height":1.6,"width":5.62583},"displayList":{"depth":1.1,"height":1.6,"itemCount":10,"width":5.62583},"input":"\\begin{aligned} a&=b+c \\\\ d+e&=f \\end{aligned}"}
+{"box":{"depth":1.1,"height":1.6,"width":5.70881},"displayList":{"depth":1.1,"height":1.6,"itemCount":16,"width":5.70881},"input":"\\begin{alignat*}{2} 10&x+ &3&y = 2 \\\\ 3&x+&13&y = 4 \\end{alignat*}"}
+{"box":{"depth":1.1,"height":1.6,"width":5.70881},"displayList":{"depth":1.1,"height":1.6,"itemCount":16,"width":5.70881},"input":"\\begin{alignat*}{2} 10&x+ &3&y = 2 \\\\ 3&x+&13&y = 4 \\end{alignat*}"}
+{"box":{"depth":1.1,"height":1.6,"width":5.70881},"displayList":{"depth":1.1,"height":1.6,"itemCount":16,"width":5.70881},"input":"\\begin{alignedat}{2} 10&x+ &3&y = 2 \\\\ 3&x+&13&y = 4 \\end{alignedat}"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.75},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.75},"input":"\\Alpha"}
 {"box":{"depth":0.0,"height":0.43056,"width":0.6434},"displayList":{"depth":0.0,"height":0.43056,"itemCount":1,"width":0.6434},"input":"\\alpha"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.75},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.75},"input":"\\amalg"}
@@ -88,14 +88,14 @@
 {"box":{"depth":1.25003,"height":1.75,"width":1.58334},"displayList":{"depth":1.25003,"height":1.75,"itemCount":2,"width":1.58334},"input":"\\Bigg(\\Bigg)"}
 {"box":{"depth":0.95003,"height":1.45,"width":0.73611},"displayList":{"depth":0.95003,"height":1.45,"itemCount":1,"width":0.73611},"input":"\\biggl("}
 {"box":{"depth":1.25003,"height":1.75,"width":0.79167},"displayList":{"depth":1.25003,"height":1.75,"itemCount":1,"width":0.79167},"input":"\\Biggl("}
-{"box":{"depth":1.19002,"height":1.69002,"width":0.333},"displayList":{"depth":1.19002,"height":1.69002,"itemCount":1,"width":0.333},"input":"\\biggm\\vert"}
-{"box":{"depth":1.45253,"height":1.95253,"width":0.333},"displayList":{"depth":1.45253,"height":1.95253,"itemCount":1,"width":0.333},"input":"\\Biggm\\vert"}
+{"box":{"depth":1.14002,"height":1.74002,"width":0.333},"displayList":{"depth":1.14002,"height":1.74002,"itemCount":1,"width":0.333},"input":"\\biggm\\vert"}
+{"box":{"depth":1.50003,"height":2.10003,"width":0.333},"displayList":{"depth":1.50003,"height":2.10003,"itemCount":1,"width":0.333},"input":"\\Biggm\\vert"}
 {"box":{"depth":0.95003,"height":1.45,"width":0.73611},"displayList":{"depth":0.95003,"height":1.45,"itemCount":1,"width":0.73611},"input":"\\biggr)"}
 {"box":{"depth":1.25003,"height":1.75,"width":0.79167},"displayList":{"depth":1.25003,"height":1.75,"itemCount":1,"width":0.79167},"input":"\\Biggr)"}
 {"box":{"depth":0.35001,"height":0.85,"width":0.45834},"displayList":{"depth":0.35001,"height":0.85,"itemCount":1,"width":0.45834},"input":"\\bigl("}
 {"box":{"depth":0.65002,"height":1.15,"width":0.59722},"displayList":{"depth":0.65002,"height":1.15,"itemCount":1,"width":0.59722},"input":"\\Bigl("}
-{"box":{"depth":0.47001,"height":0.97001,"width":0.333},"displayList":{"depth":0.47001,"height":0.97001,"itemCount":1,"width":0.333},"input":"\\bigm\\vert"}
-{"box":{"depth":0.83002,"height":1.33002,"width":0.333},"displayList":{"depth":0.83002,"height":1.33002,"itemCount":1,"width":0.333},"input":"\\Bigm\\vert"}
+{"box":{"depth":0.42001,"height":1.02001,"width":0.333},"displayList":{"depth":0.42001,"height":1.02001,"itemCount":1,"width":0.333},"input":"\\bigm\\vert"}
+{"box":{"depth":0.78002,"height":1.38002,"width":0.333},"displayList":{"depth":0.78002,"height":1.38002,"itemCount":1,"width":0.333},"input":"\\Bigm\\vert"}
 {"box":{"depth":0.55001,"height":1.05,"width":1.51112},"displayList":{"depth":0.55001,"height":1.05,"itemCount":1,"width":1.51112},"input":"\\bigodot"}
 {"box":{"depth":0.55001,"height":1.05,"width":1.51112},"displayList":{"depth":0.55001,"height":1.05,"itemCount":1,"width":1.51112},"input":"\\bigoplus"}
 {"box":{"depth":0.55001,"height":1.05,"width":1.51112},"displayList":{"depth":0.55001,"height":1.05,"itemCount":1,"width":1.51112},"input":"\\bigotimes"}
@@ -147,7 +147,7 @@
 {"box":{"depth":0.0,"height":0.54986,"width":0.66667},"displayList":{"depth":0.0,"height":0.54986,"itemCount":1,"width":0.66667},"input":"\\Cap"}
 {"box":{"depth":0.0,"height":0.55556,"width":0.66667},"displayList":{"depth":0.0,"height":0.55556,"itemCount":1,"width":0.66667},"input":"\\cap"}
 {"box":{"depth":1.25003,"height":1.75,"width":3.68798},"displayList":{"depth":1.25003,"height":1.75,"itemCount":9,"width":3.68798},"input":"\\begin{cases} a &\\text{if } b \\\\ c &\\text{if } d \\end{cases}"}
-{"box":{"depth":2.40215,"height":2.90215,"width":5.86735},"displayList":{"depth":2.40215,"height":2.90215,"itemCount":11,"width":5.86735},"input":"\\begin{CD} A @>a>> B \\\\ @VbVV @AAcA \\\\ C @= D \\end{CD}"}
+{"box":{"depth":2.25215,"height":2.75215,"width":5.86735},"displayList":{"depth":2.25215,"height":2.75215,"itemCount":11,"width":5.86735},"input":"\\begin{CD} A @>a>> B \\\\ @VbVV @AAcA \\\\ C @= D \\end{CD}"}
 {"box":{"depth":0.0,"height":0.44445,"width":0.27778},"displayList":{"depth":0.0,"height":0.44445,"itemCount":1,"width":0.27778},"input":"\\cdot"}
 {"box":{"depth":0.0,"height":0.44445,"width":0.27778},"displayList":{"depth":0.0,"height":0.44445,"itemCount":1,"width":0.27778},"input":"\\cdotp"}
 {"box":{"depth":0.0,"height":0.313,"width":1.172},"displayList":{"depth":0.0,"height":0.313,"itemCount":1,"width":1.172},"input":"\\cdots"}
@@ -230,8 +230,8 @@
 {"box":{"depth":1.25003,"height":1.75,"width":3.68798},"displayList":{"depth":1.25003,"height":1.75,"itemCount":9,"width":3.68798},"input":"\\begin{dcases} a &\\text{if } b \\\\ c &\\text{if } d \\end{dcases}"}
 {"box":{"depth":0.19444,"height":0.69444,"width":0.44445},"displayList":{"depth":0.19444,"height":0.69444,"itemCount":1,"width":0.44445},"input":"\\ddag"}
 {"box":{"depth":0.19444,"height":0.69444,"width":0.44445},"displayList":{"depth":0.19444,"height":0.69444,"itemCount":1,"width":0.44445},"input":"\\ddagger"}
-{"box":{"depth":0.0,"height":0.79302,"width":1.11112},"displayList":{"depth":0.0,"height":0.79302,"itemCount":5,"width":1.11112},"input":"\\ddddot x"}
-{"box":{"depth":0.0,"height":0.79302,"width":0.83334},"displayList":{"depth":0.0,"height":0.79302,"itemCount":4,"width":0.83334},"input":"\\dddot x"}
+{"box":{"depth":0.0,"height":0.69056,"width":1.11112},"displayList":{"depth":0.0,"height":0.69056,"itemCount":2,"width":1.11112},"input":"\\ddddot x"}
+{"box":{"depth":0.0,"height":0.69056,"width":0.83334},"displayList":{"depth":0.0,"height":0.69056,"itemCount":2,"width":0.83334},"input":"\\dddot x"}
 {"box":{"depth":0.0,"height":0.78056,"width":0.57153},"displayList":{"depth":0.0,"height":0.78056,"itemCount":2,"width":0.57153},"input":"\\ddot x"}
 {"box":{"depth":0.0,"height":0.823,"width":1.282},"displayList":{"depth":0.0,"height":0.823,"itemCount":1,"width":1.282},"input":"\\ddots"}
 {"box":{"depth":0.08333,"height":0.86411,"width":3.16528},"displayList":{"depth":0.08333,"height":0.86411,"itemCount":5,"width":3.16528},"input":"\\def\\foo{x^2} \\foo + \\foo"}
@@ -312,8 +312,8 @@
 {"box":{"depth":0.0,"height":0.68889,"width":0.63889},"displayList":{"depth":0.0,"height":0.68889,"itemCount":1,"width":0.63889},"input":"\\Game"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.625},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.625},"input":"\\Gamma"}
 {"box":{"depth":0.19444,"height":0.43056,"width":0.57329},"displayList":{"depth":0.19444,"height":0.43056,"itemCount":1,"width":0.57329},"input":"\\gamma"}
-{"box":{"depth":1.25,"height":1.75,"width":3.88312},"displayList":{"depth":1.25,"height":1.75,"itemCount":8,"width":3.88312},"input":"\\begin{gather*} a=b \\\\ e=b+c \\end{gather*}"}
-{"box":{"depth":1.25,"height":1.75,"width":3.88312},"displayList":{"depth":1.25,"height":1.75,"itemCount":8,"width":3.88312},"input":"\\begin{gathered} a=b \\\\ e=b+c \\end{gathered}"}
+{"box":{"depth":1.1,"height":1.6,"width":3.88312},"displayList":{"depth":1.1,"height":1.6,"itemCount":8,"width":3.88312},"input":"\\begin{gather*} a=b \\\\ e=b+c \\end{gather*}"}
+{"box":{"depth":1.1,"height":1.6,"width":3.88312},"displayList":{"depth":1.1,"height":1.6,"itemCount":8,"width":3.88312},"input":"\\begin{gathered} a=b \\\\ e=b+c \\end{gathered}"}
 {"box":{"depth":0.19444,"height":0.69444,"width":1.50001},"displayList":{"depth":0.19444,"height":0.69444,"itemCount":3,"width":1.50001},"input":"\\gcd"}
 {"box":{"depth":0.19444,"height":0.86411,"width":3.07454},"displayList":{"depth":0.19444,"height":0.86411,"itemCount":5,"width":3.07454},"input":"\\gdef\\sqr#1{#1^2} \\sqr{y} + \\sqr{y}"}
 {"box":{"depth":0.25,"height":0.75,"width":2.33866},"displayList":{"depth":0.25,"height":0.75,"itemCount":5,"width":2.33866},"input":"\\gdef\\VERT{|} \\braket{\\phi\\VERT\\psi}"}
@@ -356,7 +356,7 @@
 {"box":{"depth":0.011,"height":0.511,"width":1.126},"displayList":{"depth":0.011,"height":0.511,"itemCount":1,"width":1.126},"input":"\\hookleftarrow"}
 {"box":{"depth":0.011,"height":0.511,"width":1.126},"displayList":{"depth":0.011,"height":0.511,"itemCount":1,"width":1.126},"input":"\\hookrightarrow"}
 {"box":{"depth":0.0,"height":0.69444,"width":1.91101},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":1.91101},"input":"a\\hphantom{bc}d"}
-{"box":{"depth":0.3355,"height":0.68833,"width":2.84386},"displayList":{"depth":0.3355,"height":0.68833,"itemCount":6,"width":2.84386},"input":"\\href{https://katex.org/}{\\KaTeX}"}
+{"box":{"depth":0.2355,"height":0.68833,"width":2.84386},"displayList":{"depth":0.2355,"height":0.68833,"itemCount":6,"width":2.84386},"input":"\\href{https://katex.org/}{\\KaTeX}"}
 {"box":{"depth":0.0,"height":0.69444,"width":4.60783},"displayList":{"depth":0.0,"height":0.69444,"itemCount":3,"width":4.60783},"input":"w\\hskip1em i\\hskip2em d"}
 {"box":{"depth":0.0,"height":0.68889,"width":0.54028},"displayList":{"depth":0.0,"height":0.68889,"itemCount":1,"width":0.54028},"input":"\\hslash"}
 {"box":{"depth":0.0,"height":0.69444,"width":4.03783},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":4.03783},"input":"s\\hspace{7ex} k"}
@@ -377,7 +377,7 @@
 {"box":{"depth":0.19444,"height":0.68333,"width":4.29157},"displayList":{"depth":0.19444,"height":0.68333,"itemCount":3,"width":4.29157},"input":"P\\impliedby Q"}
 {"box":{"depth":0.19444,"height":0.68333,"width":4.32057},"displayList":{"depth":0.19444,"height":0.68333,"itemCount":3,"width":4.32057},"input":"P\\implies Q"}
 {"box":{"depth":0.0391,"height":0.5391,"width":0.66667},"displayList":{"depth":0.0391,"height":0.5391,"itemCount":1,"width":0.66667},"input":"\\in"}
-{"error":true,"input":"\\includegraphics[height=0.8em, totalheight=0.9em, width=0.9em, alt=KA logo]{https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png}","message":"ParseError at position 0: Undefined control sequence: \\includegraphics"}
+{"error":true,"input":"\\includegraphics[height=0.8em, totalheight=0.9em, width=0.9em, alt=KA logo]{https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png}"}
 {"box":{"depth":0.0,"height":0.69444,"width":1.1389},"displayList":{"depth":0.0,"height":0.69444,"itemCount":3,"width":1.1389},"input":"\\inf"}
 {"box":{"depth":0.0,"height":0.43056,"width":1.0},"displayList":{"depth":0.0,"height":0.43056,"itemCount":1,"width":1.0},"input":"\\infin"}
 {"box":{"depth":0.0,"height":0.43056,"width":1.0},"displayList":{"depth":0.0,"height":0.43056,"itemCount":1,"width":1.0},"input":"\\infty"}
@@ -494,7 +494,7 @@
 {"box":{"depth":0.0,"height":0.69444,"width":1.67998},"displayList":{"depth":0.0,"height":0.69444,"itemCount":3,"width":1.67998},"input":"a\\mathbin{!}b"}
 {"box":{"depth":0.0,"height":0.69444,"width":3.94345},"displayList":{"depth":0.0,"height":0.69444,"itemCount":7,"width":3.94345},"input":"\\mathcal{AaBb123}"}
 {"box":{"depth":0.0,"height":0.69444,"width":1.12443},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":1.12443},"input":"a\\mathchoice{\\,}{\\,\\,}{\\,\\,\\,}{\\,\\,\\,\\,}b"}
-{"box":{"depth":1.45285,"height":1.05001,"width":2.4738},"displayList":{"depth":1.45285,"height":1.05001,"itemCount":8,"width":2.80168},"input":"\\sum_{\\mathclap{1\\le i\\le n}} x_{i}"}
+{"box":{"depth":1.45285,"height":1.05001,"width":2.4738},"displayList":{"depth":1.45285,"height":1.05001,"itemCount":8,"width":2.4738},"input":"\\sum_{\\mathclap{1\\le i\\le n}} x_{i}"}
 {"box":{"depth":0.25,"height":0.75,"width":5.00164},"displayList":{"depth":0.25,"height":0.75,"itemCount":7,"width":5.00164},"input":"a + (b\\mathclose\\gt + c"}
 {"box":{"depth":0.0,"height":0.123,"width":1.172},"displayList":{"depth":0.0,"height":0.123,"itemCount":1,"width":1.172},"input":"\\mathellipsis"}
 {"box":{"depth":0.0,"height":0.69141,"width":2.61518},"displayList":{"depth":0.0,"height":0.69141,"itemCount":4,"width":2.61518},"input":"\\mathfrak{AaBb}"}
@@ -548,10 +548,10 @@
 {"box":{"depth":0.25142,"height":0.74111,"width":0.27778},"displayList":{"depth":0.25142,"height":0.74111,"itemCount":1,"width":0.27778},"input":"\\nmid"}
 {"box":{"depth":0.0,"height":0.69444,"width":1.20776},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":1.20776},"input":"a\\nobreakspace b"}
 {"box":{"depth":0.15,"height":0.69444,"width":1.83897},"displayList":{"depth":0.15,"height":0.69444,"itemCount":4,"width":1.83897},"input":"\\lim\\nolimits_x"}
-{"box":{"depth":1.25,"height":1.75,"width":5.57028},"displayList":{"depth":1.25,"height":1.75,"itemCount":10,"width":5.57028},"input":"\\begin{align*} a&=b+c \\\\ d+e&=f \\end{align*}"}
+{"box":{"depth":1.1,"height":1.6,"width":5.62583},"displayList":{"depth":1.1,"height":1.6,"itemCount":10,"width":5.62583},"input":"\\begin{align*} a&=b+c \\\\ d+e&=f \\end{align*}"}
 {"box":{"depth":0.0,"height":0.69444,"width":5.07647},"displayList":{"depth":0.0,"height":0.69444,"itemCount":10,"width":5.07647},"input":"\\normalsize normalsize"}
 {"box":{"depth":0.19444,"height":0.69444,"width":0.77778},"displayList":{"depth":0.19444,"height":0.69444,"itemCount":2,"width":0.77778},"input":"\\not ="}
-{"box":{"depth":1.25,"height":1.75,"width":5.57028},"displayList":{"depth":1.25,"height":1.75,"itemCount":10,"width":5.57028},"input":"\\begin{align*} a&=b+c \\\\ d+e&=f \\end{align*}"}
+{"box":{"depth":1.1,"height":1.6,"width":5.62583},"displayList":{"depth":1.1,"height":1.6,"itemCount":10,"width":5.62583},"input":"\\begin{align*} a&=b+c \\\\ d+e&=f \\end{align*}"}
 {"box":{"depth":0.25,"height":0.75,"width":0.66667},"displayList":{"depth":0.25,"height":0.75,"itemCount":2,"width":0.66667},"input":"\\notin"}
 {"box":{"depth":0.19444,"height":0.69444,"width":0.66667},"displayList":{"depth":0.19444,"height":0.69444,"itemCount":2,"width":0.66667},"input":"\\notni"}
 {"box":{"depth":0.25142,"height":0.74111,"width":0.5},"displayList":{"depth":0.25142,"height":0.74111,"itemCount":1,"width":0.5},"input":"\\nparallel"}
@@ -593,23 +593,23 @@
 {"box":{"depth":0.0,"height":0.43056,"width":0.48472},"displayList":{"depth":0.0,"height":0.43056,"itemCount":1,"width":0.48472},"input":"\\omicron"}
 {"box":{"depth":0.08333,"height":0.58333,"width":0.77778},"displayList":{"depth":0.08333,"height":0.58333,"itemCount":1,"width":0.77778},"input":"\\ominus"}
 {"box":{"depth":0.0,"height":0.66786,"width":2.46599},"displayList":{"depth":0.0,"height":0.66786,"itemCount":5,"width":2.46599},"input":"\\operatorname{asin} x"}
-{"box":{"depth":0.91611,"height":0.65952,"width":2.68028},"displayList":{"depth":0.91611,"height":0.65952,"itemCount":6,"width":2.68028},"input":"\\operatorname*{asin}\\limits_y x"}
-{"box":{"depth":0.91611,"height":0.65952,"width":2.68028},"displayList":{"depth":0.91611,"height":0.65952,"itemCount":6,"width":2.68028},"input":"\\operatornamewithlimits{asin}\\limits_y x"}
+{"box":{"depth":0.91611,"height":0.66786,"width":2.46599},"displayList":{"depth":0.91611,"height":0.66786,"itemCount":6,"width":2.46599},"input":"\\operatorname*{asin}\\limits_y x"}
+{"box":{"depth":0.91611,"height":0.66786,"width":2.46599},"displayList":{"depth":0.91611,"height":0.66786,"itemCount":6,"width":2.46599},"input":"\\operatornamewithlimits{asin}\\limits_y x"}
 {"box":{"depth":0.08333,"height":0.58333,"width":0.77778},"displayList":{"depth":0.08333,"height":0.58333,"itemCount":1,"width":0.77778},"input":"\\oplus"}
 {"box":{"depth":0.0,"height":0.375,"width":0.7},"displayList":{"depth":0.0,"height":0.375,"itemCount":3,"width":0.7},"input":"\\origof"}
 {"box":{"depth":0.08333,"height":0.58333,"width":0.77778},"displayList":{"depth":0.08333,"height":0.58333,"itemCount":1,"width":0.77778},"input":"\\oslash"}
 {"box":{"depth":0.08333,"height":0.58333,"width":0.77778},"displayList":{"depth":0.08333,"height":0.58333,"itemCount":1,"width":0.77778},"input":"\\otimes"}
 {"box":{"depth":0.76933,"height":1.32144,"width":4.1458},"displayList":{"depth":0.76933,"height":1.32144,"itemCount":9,"width":4.1458},"input":"{a+1 \\over b+2}+c"}
 {"box":{"depth":0.08333,"height":1.89883,"width":4.75951},"displayList":{"depth":0.08333,"height":1.89883,"itemCount":12,"width":4.75951},"input":"\\overbrace{x+⋯+x}^{n\\text{ times}}"}
-{"box":{"depth":0.0,"height":1.09033,"width":1.55868},"displayList":{"depth":0.0,"height":1.09033,"itemCount":3,"width":1.55868},"input":"\\overgroup{AB}"}
-{"box":{"depth":0.0,"height":1.20433,"width":1.55868},"displayList":{"depth":0.0,"height":1.20433,"itemCount":3,"width":1.55868},"input":"\\overleftarrow{AB}"}
-{"box":{"depth":0.0,"height":1.20433,"width":1.55868},"displayList":{"depth":0.0,"height":1.20433,"itemCount":3,"width":1.55868},"input":"\\overleftharpoon{AB}"}
-{"box":{"depth":0.0,"height":1.20433,"width":1.55868},"displayList":{"depth":0.0,"height":1.20433,"itemCount":3,"width":1.55868},"input":"\\overleftrightarrow{AB}"}
-{"box":{"depth":0.19444,"height":0.81444,"width":7.00281},"displayList":{"depth":0.19444,"height":0.81444,"itemCount":14,"width":7.00281},"input":"\\overline{\\text{a long argument}}"}
-{"box":{"depth":0.0,"height":1.20433,"width":1.55868},"displayList":{"depth":0.0,"height":1.20433,"itemCount":3,"width":1.55868},"input":"\\overlinesegment{AB}"}
-{"box":{"depth":0.0,"height":1.17333,"width":1.55868},"displayList":{"depth":0.0,"height":1.17333,"itemCount":3,"width":1.55868},"input":"\\Overrightarrow{AB}"}
-{"box":{"depth":0.0,"height":1.20433,"width":1.55868},"displayList":{"depth":0.0,"height":1.20433,"itemCount":3,"width":1.55868},"input":"\\overrightarrow{AB}"}
-{"box":{"depth":0.0,"height":0.95156,"width":0.96135},"displayList":{"depth":0.0,"height":0.95156,"itemCount":3,"width":0.96135},"input":"\\overrightharpoon{ac}"}
+{"box":{"depth":0.0,"height":1.02533,"width":1.55868},"displayList":{"depth":0.0,"height":1.02533,"itemCount":3,"width":1.55868},"input":"\\overgroup{AB}"}
+{"box":{"depth":0.0,"height":1.20533,"width":1.55868},"displayList":{"depth":0.0,"height":1.20533,"itemCount":3,"width":1.55868},"input":"\\overleftarrow{AB}"}
+{"box":{"depth":0.0,"height":1.20533,"width":1.55868},"displayList":{"depth":0.0,"height":1.20533,"itemCount":3,"width":1.55868},"input":"\\overleftharpoon{AB}"}
+{"box":{"depth":0.0,"height":1.20533,"width":1.55868},"displayList":{"depth":0.0,"height":1.20533,"itemCount":3,"width":1.55868},"input":"\\overleftrightarrow{AB}"}
+{"box":{"depth":0.19444,"height":0.89444,"width":7.00281},"displayList":{"depth":0.19444,"height":0.89444,"itemCount":14,"width":7.00281},"input":"\\overline{\\text{a long argument}}"}
+{"box":{"depth":0.0,"height":1.20533,"width":1.55868},"displayList":{"depth":0.0,"height":1.20533,"itemCount":3,"width":1.55868},"input":"\\overlinesegment{AB}"}
+{"box":{"depth":0.0,"height":1.24333,"width":1.55868},"displayList":{"depth":0.0,"height":1.24333,"itemCount":3,"width":1.55868},"input":"\\Overrightarrow{AB}"}
+{"box":{"depth":0.0,"height":1.20533,"width":1.55868},"displayList":{"depth":0.0,"height":1.20533,"itemCount":3,"width":1.55868},"input":"\\overrightarrow{AB}"}
+{"box":{"depth":0.0,"height":0.95256,"width":0.96135},"displayList":{"depth":0.0,"height":0.95256,"itemCount":3,"width":0.96135},"input":"\\overrightharpoon{ac}"}
 {"box":{"depth":0.0,"height":1.15298,"width":0.77778},"displayList":{"depth":0.0,"height":1.15298,"itemCount":2,"width":0.77778},"input":"\\overset{!}{=}"}
 {"box":{"depth":0.0391,"height":0.5391,"width":0.66667},"displayList":{"depth":0.0391,"height":0.5391,"itemCount":1,"width":0.66667},"input":"\\owns"}
 {"box":{"depth":0.19444,"height":0.69444,"width":0.61111},"displayList":{"depth":0.19444,"height":0.69444,"itemCount":1,"width":0.61111},"input":"\\text{\\P}"}
@@ -652,7 +652,7 @@
 {"box":{"depth":0.0,"height":0.69444,"width":4.95776},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":4.95776},"input":"a\\qquad\\qquad{b}"}
 {"box":{"depth":0.0,"height":0.69444,"width":2.95776},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":2.95776},"input":"a\\quad\\quad{b}"}
 {"box":{"depth":0.0,"height":0.68889,"width":0.72222},"displayList":{"depth":0.0,"height":0.68889,"itemCount":1,"width":0.72222},"input":"\\R"}
-{"box":{"depth":0.0,"height":0.69444,"width":0.5},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":0.75},"input":"\\text{\\r{a}}"}
+{"box":{"depth":0.0,"height":0.69444,"width":0.5},"displayList":{"depth":0.0,"height":0.69444,"itemCount":2,"width":0.5},"input":"\\text{\\r{a}}"}
 {"box":{"depth":0.0,"height":0.89444,"width":2.83289},"displayList":{"depth":0.0,"height":0.89444,"itemCount":6,"width":2.83289},"input":"h\\raisebox{2pt}{ighe}r"}
 {"box":{"depth":0.25,"height":0.75,"width":1.52778},"displayList":{"depth":0.25,"height":0.75,"itemCount":3,"width":1.52778},"input":"\\langle A\\rang"}
 {"box":{"depth":0.0,"height":0.36687,"width":1.0},"displayList":{"depth":0.0,"height":0.36687,"itemCount":1,"width":1.0},"input":"\\Rarr"}
@@ -737,7 +737,7 @@
 {"box":{"depth":0.12963,"height":0.69444,"width":0.77778},"displayList":{"depth":0.12963,"height":0.69444,"itemCount":1,"width":0.77778},"input":"\\spades"}
 {"box":{"depth":0.12963,"height":0.69444,"width":0.77778},"displayList":{"depth":0.12963,"height":0.69444,"itemCount":1,"width":0.77778},"input":"\\spadesuit"}
 {"box":{"depth":0.03517,"height":0.52239,"width":0.72222},"displayList":{"depth":0.03517,"height":0.52239,"itemCount":1,"width":0.72222},"input":"\\sphericalangle"}
-{"box":{"depth":1.25,"height":1.75,"width":4.09145},"displayList":{"depth":1.25,"height":1.75,"itemCount":9,"width":4.09145},"input":"\\begin{equation*} \\begin{split} a &=b+c\\\\ &=e+f \\end{split} \\end{equation*}"}
+{"box":{"depth":1.1,"height":1.6,"width":4.14701},"displayList":{"depth":1.1,"height":1.6,"itemCount":9,"width":4.14701},"input":"\\begin{equation*} \\begin{split} a &=b+c\\\\ &=e+f \\end{split} \\end{equation*}"}
 {"box":{"depth":0.0,"height":0.55556,"width":0.66667},"displayList":{"depth":0.0,"height":0.55556,"itemCount":1,"width":0.66667},"input":"\\sqcap"}
 {"box":{"depth":0.0,"height":0.55556,"width":0.66667},"displayList":{"depth":0.0,"height":0.55556,"itemCount":1,"width":0.66667},"input":"\\sqcup"}
 {"box":{"depth":0.0,"height":0.675,"width":0.77778},"displayList":{"depth":0.0,"height":0.675,"itemCount":1,"width":0.77778},"input":"\\square"}
@@ -808,12 +808,12 @@
 {"box":{"depth":0.0,"height":0.69224,"width":0.5},"displayList":{"depth":0.0,"height":0.69224,"itemCount":1,"width":0.5},"input":"\\ulcorner"}
 {"box":{"depth":0.18,"height":0.68333,"width":0.75},"displayList":{"depth":0.18,"height":0.68333,"itemCount":2,"width":0.75},"input":"\\underbar{X}"}
 {"box":{"depth":1.39883,"height":0.58333,"width":4.75951},"displayList":{"depth":1.39883,"height":0.58333,"itemCount":12,"width":4.75951},"input":"\\underbrace{x+⋯+x}_{n\\text{ times}}"}
-{"box":{"depth":0.407,"height":0.68333,"width":1.55868},"displayList":{"depth":0.407,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\undergroup{AB}"}
-{"box":{"depth":0.782,"height":0.68333,"width":1.55868},"displayList":{"depth":0.782,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\underleftarrow{AB}"}
-{"box":{"depth":0.782,"height":0.68333,"width":1.55868},"displayList":{"depth":0.782,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\underleftrightarrow{AB}"}
-{"box":{"depth":0.782,"height":0.68333,"width":1.55868},"displayList":{"depth":0.782,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\underrightarrow{AB}"}
+{"box":{"depth":0.342,"height":0.68333,"width":1.55868},"displayList":{"depth":0.342,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\undergroup{AB}"}
+{"box":{"depth":0.522,"height":0.68333,"width":1.55868},"displayList":{"depth":0.522,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\underleftarrow{AB}"}
+{"box":{"depth":0.522,"height":0.68333,"width":1.55868},"displayList":{"depth":0.522,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\underleftrightarrow{AB}"}
+{"box":{"depth":0.522,"height":0.68333,"width":1.55868},"displayList":{"depth":0.522,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\underrightarrow{AB}"}
 {"box":{"depth":0.37444,"height":0.69444,"width":7.00281},"displayList":{"depth":0.37444,"height":0.69444,"itemCount":14,"width":7.00281},"input":"\\underline{\\text{a long argument}}"}
-{"box":{"depth":0.782,"height":0.68333,"width":1.55868},"displayList":{"depth":0.782,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\underlinesegment{AB}"}
+{"box":{"depth":0.522,"height":0.68333,"width":1.55868},"displayList":{"depth":0.522,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\underlinesegment{AB}"}
 {"box":{"depth":0.75211,"height":0.36687,"width":0.77778},"displayList":{"depth":0.75211,"height":0.36687,"itemCount":2,"width":0.77778},"input":"\\underset{!}{=}"}
 {"box":{"depth":0.13667,"height":0.63667,"width":0.77778},"displayList":{"depth":0.13667,"height":0.63667,"itemCount":1,"width":0.77778},"input":"\\unlhd"}
 {"box":{"depth":0.13667,"height":0.63667,"width":0.77778},"displayList":{"depth":0.13667,"height":0.63667,"itemCount":1,"width":0.77778},"input":"\\unrhd"}
@@ -828,24 +828,24 @@
 {"box":{"depth":0.0,"height":0.43056,"width":0.57616},"displayList":{"depth":0.0,"height":0.43056,"itemCount":1,"width":0.57616},"input":"\\upsilon"}
 {"box":{"depth":0.19444,"height":0.69224,"width":0.83334},"displayList":{"depth":0.19444,"height":0.69224,"itemCount":1,"width":0.83334},"input":"\\upuparrows"}
 {"box":{"depth":0.0,"height":0.69224,"width":0.5},"displayList":{"depth":0.0,"height":0.69224,"itemCount":1,"width":0.5},"input":"\\urcorner"}
-{"box":{"depth":0.34222,"height":0.69444,"width":10.3},"displayList":{"depth":0.34222,"height":0.69444,"itemCount":21,"width":10.3},"input":"\\url{https://katex.org/}"}
-{"box":{"depth":0.471,"height":0.68333,"width":1.55868},"displayList":{"depth":0.471,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\utilde{AB}"}
+{"box":{"depth":0.24222,"height":0.69444,"width":9.45},"displayList":{"depth":0.24222,"height":0.69444,"itemCount":21,"width":9.45},"input":"\\url{https://katex.org/}"}
+{"box":{"depth":0.406,"height":0.68333,"width":1.55868},"displayList":{"depth":0.406,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\utilde{AB}"}
 {"box":{"depth":0.0,"height":0.62847,"width":0.5},"displayList":{"depth":0.0,"height":0.62847,"itemCount":2,"width":0.5},"input":"\\text{\\v{a}}"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.83334},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.83334},"input":"\\varDelta"}
 {"box":{"depth":0.0,"height":0.43056,"width":0.46632},"displayList":{"depth":0.0,"height":0.43056,"itemCount":1,"width":0.46632},"input":"\\varepsilon"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.75417},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.75417},"input":"\\varGamma"}
-{"box":{"depth":0.782,"height":0.69444,"width":1.3889},"displayList":{"depth":0.782,"height":0.69444,"itemCount":4,"width":1.3889},"input":"\\varinjlim"}
+{"box":{"depth":0.522,"height":0.69444,"width":1.3889},"displayList":{"depth":0.522,"height":0.69444,"itemCount":4,"width":1.3889},"input":"\\varinjlim"}
 {"box":{"depth":0.0,"height":0.43056,"width":0.70695},"displayList":{"depth":0.0,"height":0.43056,"itemCount":1,"width":0.70695},"input":"\\varkappa"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.69445},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.69445},"input":"\\varLambda"}
 {"box":{"depth":0.18,"height":0.69444,"width":1.3889},"displayList":{"depth":0.18,"height":0.69444,"itemCount":4,"width":1.3889},"input":"\\varliminf"}
-{"box":{"depth":0.0,"height":0.81444,"width":1.3889},"displayList":{"depth":0.0,"height":0.81444,"itemCount":4,"width":1.3889},"input":"\\varlimsup"}
+{"box":{"depth":0.0,"height":0.89444,"width":1.3889},"displayList":{"depth":0.0,"height":0.89444,"itemCount":4,"width":1.3889},"input":"\\varlimsup"}
 {"box":{"depth":0.08167,"height":0.58167,"width":0.77778},"displayList":{"depth":0.08167,"height":0.58167,"itemCount":1,"width":0.77778},"input":"\\varnothing"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.82257},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.82257},"input":"\\varOmega"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.66667},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.66667},"input":"\\varPhi"}
 {"box":{"depth":0.19444,"height":0.43056,"width":0.65417},"displayList":{"depth":0.19444,"height":0.43056,"itemCount":1,"width":0.65417},"input":"\\varphi"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.9125},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.9125},"input":"\\varPi"}
 {"box":{"depth":0.0,"height":0.43056,"width":0.85591},"displayList":{"depth":0.0,"height":0.43056,"itemCount":1,"width":0.85591},"input":"\\varpi"}
-{"box":{"depth":0.782,"height":0.69444,"width":1.3889},"displayList":{"depth":0.782,"height":0.69444,"itemCount":4,"width":1.3889},"input":"\\varprojlim"}
+{"box":{"depth":0.522,"height":0.69444,"width":1.3889},"displayList":{"depth":0.522,"height":0.69444,"itemCount":4,"width":1.3889},"input":"\\varprojlim"}
 {"box":{"depth":0.0,"height":0.69224,"width":0.77778},"displayList":{"depth":0.0,"height":0.69224,"itemCount":1,"width":0.77778},"input":"\\varpropto"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.72222},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.72222},"input":"\\varPsi"}
 {"box":{"depth":0.19444,"height":0.43056,"width":0.51702},"displayList":{"depth":0.19444,"height":0.43056,"itemCount":1,"width":0.51702},"input":"\\varrho"}
@@ -878,16 +878,16 @@
 {"box":{"depth":0.95002,"height":1.45002,"width":4.66756},"displayList":{"depth":0.95002,"height":1.45002,"itemCount":8,"width":4.66756},"input":"\\begin{Vmatrix*}[r] 0 & -1 \\\\ -1 & 0 \\end{Vmatrix*}"}
 {"box":{"depth":0.95002,"height":1.45002,"width":2.71508},"displayList":{"depth":0.95002,"height":1.45002,"itemCount":6,"width":2.71508},"input":"\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix}"}
 {"box":{"depth":0.95002,"height":1.45002,"width":4.22156},"displayList":{"depth":0.95002,"height":1.45002,"itemCount":8,"width":4.22156},"input":"\\begin{vmatrix*}[r] 0 & -1 \\\\ -1 & 0 \\end{vmatrix*}"}
-{"box":{"depth":0.0,"height":0.80333,"width":0.52859},"displayList":{"depth":0.0,"height":0.80333,"itemCount":2,"width":0.52859},"input":"\\overline{\\vphantom{M}a}"}
+{"box":{"depth":0.0,"height":0.88333,"width":0.52859},"displayList":{"depth":0.0,"height":0.88333,"itemCount":2,"width":0.52859},"input":"\\overline{\\vphantom{M}a}"}
 {"box":{"depth":0.0,"height":0.69224,"width":0.88889},"displayList":{"depth":0.0,"height":0.69224,"itemCount":1,"width":0.88889},"input":"\\Vvdash"}
 {"box":{"depth":0.0,"height":0.55556,"width":0.66667},"displayList":{"depth":0.0,"height":0.55556,"itemCount":1,"width":0.66667},"input":"\\wedge"}
 {"box":{"depth":0.19444,"height":0.43056,"width":0.63646},"displayList":{"depth":0.19444,"height":0.43056,"itemCount":1,"width":0.63646},"input":"\\weierp"}
-{"box":{"depth":0.0,"height":1.04833,"width":1.55868},"displayList":{"depth":0.0,"height":1.04833,"itemCount":3,"width":1.55868},"input":"\\widecheck{AB}"}
-{"box":{"depth":0.0,"height":1.04833,"width":1.55868},"displayList":{"depth":0.0,"height":1.04833,"itemCount":3,"width":1.55868},"input":"\\widehat{AB}"}
-{"box":{"depth":0.0,"height":1.03433,"width":1.55868},"displayList":{"depth":0.0,"height":1.03433,"itemCount":3,"width":1.55868},"input":"\\widetilde{AB}"}
+{"box":{"depth":0.0,"height":0.98333,"width":1.55868},"displayList":{"depth":0.0,"height":0.98333,"itemCount":3,"width":1.55868},"input":"\\widecheck{AB}"}
+{"box":{"depth":0.0,"height":0.98333,"width":1.55868},"displayList":{"depth":0.0,"height":0.98333,"itemCount":3,"width":1.55868},"input":"\\widehat{AB}"}
+{"box":{"depth":0.0,"height":0.96933,"width":1.55868},"displayList":{"depth":0.0,"height":0.96933,"itemCount":3,"width":1.55868},"input":"\\widetilde{AB}"}
 {"box":{"depth":0.19444,"height":0.43056,"width":0.63646},"displayList":{"depth":0.19444,"height":0.43056,"itemCount":1,"width":0.63646},"input":"\\wp"}
 {"box":{"depth":0.19444,"height":0.69444,"width":0.27778},"displayList":{"depth":0.19444,"height":0.69444,"itemCount":1,"width":0.27778},"input":"\\wr"}
-{"box":{"depth":0.0,"height":0.68333,"width":2.34493},"displayList":{"depth":0.0,"height":0.68333,"itemCount":4,"width":2.74493},"input":"\\xcancel{ABC}"}
+{"box":{"depth":0.0,"height":0.68333,"width":2.34493},"displayList":{"depth":0.0,"height":0.68333,"itemCount":4,"width":2.34493},"input":"\\xcancel{ABC}"}
 {"box":{"depth":0.0,"height":0.43056,"width":0.52859},"displayList":{"depth":0.0,"height":0.43056,"itemCount":1,"width":0.52859},"input":"\\def\\foo{a}\\xdef\\fcopy{\\foo}\\def\\foo{}\\fcopy"}
 {"box":{"depth":0.0,"height":0.68333,"width":0.66667},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.66667},"input":"\\Xi"}
 {"box":{"depth":0.19444,"height":0.69444,"width":0.48351},"displayList":{"depth":0.19444,"height":0.69444,"itemCount":1,"width":0.48351},"input":"\\xi"}
@@ -915,8 +915,8 @@
 {"box":{"depth":0.0,"height":0.68333,"width":0.61111},"displayList":{"depth":0.0,"height":0.68333,"itemCount":1,"width":0.61111},"input":"\\Zeta"}
 {"box":{"depth":0.19444,"height":0.69444,"width":0.51128},"displayList":{"depth":0.19444,"height":0.69444,"itemCount":1,"width":0.51128},"input":"\\zeta"}
 {"box":{"depth":0.0,"height":0.94677,"width":1.07917},"displayList":{"depth":0.0,"height":0.94677,"itemCount":2,"width":1.07917},"input":"\\hat{M}"}
-{"box":{"depth":0.0,"height":0.95788,"width":0.42917},"displayList":{"depth":0.0,"height":0.95788,"itemCount":2,"width":0.5},"input":"\\hat{b}"}
-{"box":{"depth":0.0,"height":0.95788,"width":0.52859},"displayList":{"depth":0.0,"height":0.95788,"itemCount":3,"width":0.75},"input":"\\hat{\\aa}"}
+{"box":{"depth":0.0,"height":0.95788,"width":0.42917},"displayList":{"depth":0.0,"height":0.95788,"itemCount":2,"width":0.42917},"input":"\\hat{b}"}
+{"box":{"depth":0.0,"height":0.95788,"width":0.52859},"displayList":{"depth":0.0,"height":0.95788,"itemCount":3,"width":0.52859},"input":"\\hat{\\aa}"}
 {"box":{"depth":0.0,"height":0.78056,"width":0.48472},"displayList":{"depth":0.0,"height":0.78056,"itemCount":2,"width":0.48472},"input":"\\hat{o}"}
 {"box":{"depth":0.0,"height":0.92019,"width":1.07917},"displayList":{"depth":0.0,"height":0.92019,"itemCount":2,"width":1.07917},"input":"\\tilde{M}"}
 {"box":{"depth":2.50676,"height":3.00676,"width":9.78078},"displayList":{"depth":2.50676,"height":3.00676,"itemCount":44,"width":9.78078},"input":"\\left\\{\\begin{array}{l} \\nabla\\cdot\\vec{D} = \\rho \\\\ \\nabla\\cdot\\vec{B} = 0 \\\\ \\nabla\\times\\vec{E} = -\\frac{\\partial\\vec{B}}{\\partial t} \\\\ \\nabla\\times\\vec{H} = \\vec{J}_f + \\frac{\\partial\\vec{D}}{\\partial t} \\end{array}\\right."}
@@ -932,9 +932,9 @@
 {"box":{"depth":0.0,"height":0.94677,"width":0.75},"displayList":{"depth":0.0,"height":0.94677,"itemCount":2,"width":0.75},"input":"\\mathring{A}"}
 {"box":{"depth":0.0,"height":0.95788,"width":0.57153},"displayList":{"depth":0.0,"height":0.95788,"itemCount":3,"width":0.57153},"input":"\\hat{\\hat{x}}"}
 {"box":{"depth":0.19444,"height":0.95086,"width":4.25314},"displayList":{"depth":0.19444,"height":0.95086,"itemCount":7,"width":4.25314},"input":"\\dot{\\vec{p}} = -\\nabla V"}
-{"box":{"depth":0.08333,"height":1.04833,"width":3.68611},"displayList":{"depth":0.08333,"height":1.04833,"itemCount":5,"width":3.68611},"input":"\\widehat{XY + Z}"}
-{"box":{"depth":0.19444,"height":1.04544,"width":2.05452},"displayList":{"depth":0.19444,"height":1.04544,"itemCount":4,"width":2.05452},"input":"\\widetilde{f \\circ g}"}
-{"box":{"depth":0.0,"height":0.95086,"width":0.47894},"displayList":{"depth":0.0,"height":0.95086,"itemCount":3,"width":0.55906},"input":"\\ddot{\\vec{r}}"}
+{"box":{"depth":0.08333,"height":0.98333,"width":3.68611},"displayList":{"depth":0.08333,"height":0.98333,"itemCount":5,"width":3.68611},"input":"\\widehat{XY + Z}"}
+{"box":{"depth":0.19444,"height":0.98044,"width":2.05452},"displayList":{"depth":0.19444,"height":0.98044,"itemCount":4,"width":2.05452},"input":"\\widetilde{f \\circ g}"}
+{"box":{"depth":0.0,"height":0.95086,"width":0.47894},"displayList":{"depth":0.0,"height":0.95086,"itemCount":3,"width":0.47894},"input":"\\ddot{\\vec{r}}"}
 {"box":{"depth":0.28611,"height":0.71439,"width":2.46617},"displayList":{"depth":0.28611,"height":0.71439,"itemCount":5,"width":2.46617},"input":"R^{\\mu}{}_{{\\nu\\rho\\sigma}}"}
 {"box":{"depth":0.28611,"height":0.89911,"width":8.03131},"displayList":{"depth":0.28611,"height":0.89911,"itemCount":15,"width":8.03131},"input":"T^{\\mu\\nu}{}_{\\rho} = g^{\\mu\\alpha}g^{\\nu\\beta}T_{\\alpha\\beta\\rho}"}
 {"box":{"depth":0.38311,"height":0.84511,"width":14.83827},"displayList":{"depth":0.38311,"height":0.84511,"itemCount":30,"width":14.83827},"input":"\\Gamma^{\\mu}_{\\nu\\rho} = \\tfrac{1}{2}g^{\\mu\\sigma}\\!\\left(\\partial_\\nu g_{\\rho\\sigma}+\\partial_\\rho g_{\\nu\\sigma}-\\partial_\\sigma g_{\\nu\\rho}\\right)"}
@@ -949,28 +949,28 @@
 {"box":{"depth":0.13597,"height":0.94677,"width":2.9307},"displayList":{"depth":0.13597,"height":0.94677,"itemCount":5,"width":2.9307},"input":"\\mathring{U} \\subseteq \\overline{V}"}
 {"box":{"depth":0.0,"height":0.95233,"width":0.72222},"displayList":{"depth":0.0,"height":0.95233,"itemCount":2,"width":0.72222},"input":"\\acute{\\mathbb{A}}"}
 {"box":{"depth":0.0,"height":0.89747,"width":0.86814},"displayList":{"depth":0.0,"height":0.89747,"itemCount":2,"width":0.86814},"input":"\\check{\\mathscr{D}}"}
-{"box":{"depth":0.08333,"height":0.88826,"width":4.66859},"displayList":{"depth":0.08333,"height":0.88826,"itemCount":8,"width":4.69637},"input":"\\tilde{\\mathrm{e}}^{\\mathrm{i}\\pi}+1=0"}
-{"box":{"depth":0.471,"height":1.04833,"width":4.49876},"displayList":{"depth":0.471,"height":1.04833,"itemCount":7,"width":4.49876},"input":"\\utilde{EF} + \\widehat{GH}"}
-{"box":{"depth":0.95,"height":1.45,"width":3.0},"displayList":{"depth":0.97,"height":1.47,"itemCount":10,"width":3.04},"input":"\\begin{array}{|c|c|} \\hline 1 & 2 \\\\ \\hline 3 & 4 \\\\ \\hline \\end{array}"}
+{"box":{"depth":0.08333,"height":0.88826,"width":4.66859},"displayList":{"depth":0.08333,"height":0.88826,"itemCount":8,"width":4.66859},"input":"\\tilde{\\mathrm{e}}^{\\mathrm{i}\\pi}+1=0"}
+{"box":{"depth":0.406,"height":0.98333,"width":4.49876},"displayList":{"depth":0.406,"height":0.98333,"itemCount":7,"width":4.49876},"input":"\\utilde{EF} + \\widehat{GH}"}
+{"box":{"depth":0.95,"height":1.45,"width":3.0},"displayList":{"depth":0.97,"height":1.47,"itemCount":10,"width":3.0},"input":"\\begin{array}{|c|c|} \\hline 1 & 2 \\\\ \\hline 3 & 4 \\\\ \\hline \\end{array}"}
 {"box":{"depth":0.686,"height":1.59039,"width":7.01526},"displayList":{"depth":0.686,"height":1.59039,"itemCount":14,"width":7.01526},"input":"\\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}"}
-{"box":{"depth":2.50365,"height":3.00365,"width":5.64195},"displayList":{"depth":2.50365,"height":3.13976,"itemCount":10,"width":5.64195},"input":"\\begin{CD} A @>f>> B \\\\ @VVV @VVV \\\\ C @>g>> D \\end{CD}"}
-{"box":{"depth":2.39301,"height":2.89301,"width":5.64195},"displayList":{"depth":2.39301,"height":2.89301,"itemCount":8,"width":5.64195},"input":"\\begin{CD} A @= B \\\\ @| @| \\\\ C @= D \\end{CD}"}
-{"box":{"depth":2.50365,"height":3.00365,"width":5.64195},"displayList":{"depth":2.50365,"height":3.13976,"itemCount":10,"width":5.64195},"input":"\\begin{CD} A @<f<< B \\\\ @AAA @AAA \\\\ C @<g<< D \\end{CD}"}
-{"box":{"depth":2.59601,"height":3.09601,"width":10.45063},"displayList":{"depth":2.59601,"height":3.23212,"itemCount":16,"width":10.45063},"input":"\\begin{CD} A @>f>> B @>g>> C \\\\ @VVV @. @VVV \\\\ D @>h>> E @>k>> F \\end{CD}"}
-{"box":{"depth":4.2395,"height":4.7395,"width":9.566},"displayList":{"depth":4.2395,"height":4.7395,"itemCount":21,"width":9.566},"input":"\\begin{CD} 0 @>>> 1 @>>> 2 \\\\ @VVV @VVV @VVV \\\\ 3 @>>> 4 @>>> 5 \\\\ @VVV @VVV @VVV \\\\ 6 @>>> 7 @>>> 8 \\end{CD}"}
-{"box":{"depth":2.51484,"height":3.01484,"width":6.41973},"displayList":{"depth":2.51484,"height":3.15095,"itemCount":14,"width":6.41973},"input":"\\begin{CD} A @>p>q>> B \\\\ @VVV @VVV \\\\ C @>r>s>> D \\end{CD}"}
-{"box":{"depth":2.40215,"height":2.90215,"width":6.64545},"displayList":{"depth":2.40215,"height":2.90215,"itemCount":12,"width":6.64545},"input":"\\begin{CD} X @>{\\alpha}>{}>> Y \\\\ @V{\\beta}V{}V @A{}A{\\gamma}A \\\\ Z @= W \\end{CD}"}
-{"box":{"depth":2.393,"height":2.893,"width":7.29618},"displayList":{"depth":2.393,"height":2.893,"itemCount":10,"width":7.29618},"input":"\\begin{CD} X\\times Y @>>> Z \\\\ @VVV @VVV \\\\ A @>>> B \\end{CD}"}
-{"box":{"depth":2.393,"height":2.893,"width":5.44445},"displayList":{"depth":2.393,"height":2.893,"itemCount":8,"width":5.44445},"input":"\\begin{CD} \\mathbb{Z} @>>> \\mathbb{Q} \\\\ @VVV @VVV \\\\ 0 @= 0 \\end{CD}"}
-{"box":{"depth":2.6315,"height":3.1315,"width":6.48612},"displayList":{"depth":2.6315,"height":3.1315,"itemCount":14,"width":6.48612},"input":"\\begin{CD} E @<a<b<< F \\\\ @AAA @AAA \\\\ G @<c<d<< H \\end{CD}"}
-{"box":{"depth":2.6465,"height":3.1465,"width":6.37701},"displayList":{"depth":2.6465,"height":3.1465,"itemCount":11,"width":6.37701},"input":"\\begin{CD} P @VpVqVV Q \\\\ @VVV @VVV \\\\ R @= S \\end{CD}"}
-{"box":{"depth":4.2395,"height":4.7395,"width":7.09471},"displayList":{"depth":4.2395,"height":4.7395,"itemCount":13,"width":7.09471},"input":"\\begin{CD} P @>>> Q \\\\ @VVV @. @VVV \\\\ R @>>> S \\\\ @VVV @VVV \\\\ T @>>> U \\end{CD}"}
-{"box":{"depth":2.39301,"height":2.89301,"width":5.99028},"displayList":{"depth":2.39301,"height":2.89301,"itemCount":8,"width":5.99028},"input":"\\begin{CD} W @>>> X \\\\ @| @| \\\\ Y @>>> Z \\end{CD}"}
-{"box":{"depth":2.393,"height":2.893,"width":12.07259},"displayList":{"depth":2.393,"height":2.893,"itemCount":20,"width":12.07259},"input":"\\begin{CD} \\operatorname{Hom}(A,B) @>>> \\mathrm{End}(V) \\\\ @VVV @VVV \\\\ 0 @>>> 1 \\end{CD}"}
+{"box":{"depth":2.26902,"height":2.76902,"width":5.64195},"displayList":{"depth":2.26902,"height":2.90513,"itemCount":14,"width":5.64195},"input":"\\begin{CD} A @>f>> B \\\\ @VVV @VVV \\\\ C @>g>> D \\end{CD}"}
+{"box":{"depth":2.24301,"height":2.74302,"width":5.64195},"displayList":{"depth":2.24301,"height":2.74302,"itemCount":8,"width":5.64195},"input":"\\begin{CD} A @= B \\\\ @| @| \\\\ C @= D \\end{CD}"}
+{"box":{"depth":2.26902,"height":2.76902,"width":5.64195},"displayList":{"depth":2.26902,"height":2.90513,"itemCount":14,"width":5.64195},"input":"\\begin{CD} A @<f<< B \\\\ @AAA @AAA \\\\ C @<g<< D \\end{CD}"}
+{"box":{"depth":2.44602,"height":2.94602,"width":10.45063},"displayList":{"depth":2.44602,"height":3.08213,"itemCount":20,"width":10.45063},"input":"\\begin{CD} A @>f>> B @>g>> C \\\\ @VVV @. @VVV \\\\ D @>h>> E @>k>> F \\end{CD}"}
+{"box":{"depth":4.08953,"height":4.58953,"width":10.00001},"displayList":{"depth":4.08953,"height":4.58953,"itemCount":33,"width":10.00001},"input":"\\begin{CD} 0 @>>> 1 @>>> 2 \\\\ @VVV @VVV @VVV \\\\ 3 @>>> 4 @>>> 5 \\\\ @VVV @VVV @VVV \\\\ 6 @>>> 7 @>>> 8 \\end{CD}"}
+{"box":{"depth":2.36485,"height":2.86485,"width":6.41973},"displayList":{"depth":2.36485,"height":3.00096,"itemCount":18,"width":6.41973},"input":"\\begin{CD} A @>p>q>> B \\\\ @VVV @VVV \\\\ C @>r>s>> D \\end{CD}"}
+{"box":{"depth":2.25215,"height":2.75215,"width":6.64545},"displayList":{"depth":2.25215,"height":2.75215,"itemCount":12,"width":6.64545},"input":"\\begin{CD} X @>{\\alpha}>{}>> Y \\\\ @V{\\beta}V{}V @A{}A{\\gamma}A \\\\ Z @= W \\end{CD}"}
+{"box":{"depth":2.24301,"height":2.74302,"width":7.29618},"displayList":{"depth":2.24301,"height":2.74302,"itemCount":14,"width":7.29618},"input":"\\begin{CD} X\\times Y @>>> Z \\\\ @VVV @VVV \\\\ A @>>> B \\end{CD}"}
+{"box":{"depth":2.24301,"height":2.74302,"width":5.44445},"displayList":{"depth":2.24301,"height":2.74302,"itemCount":12,"width":5.44445},"input":"\\begin{CD} \\mathbb{Z} @>>> \\mathbb{Q} \\\\ @VVV @VVV \\\\ 0 @= 0 \\end{CD}"}
+{"box":{"depth":2.48152,"height":2.98152,"width":6.48612},"displayList":{"depth":2.48152,"height":2.98152,"itemCount":18,"width":6.48612},"input":"\\begin{CD} E @<a<b<< F \\\\ @AAA @AAA \\\\ G @<c<d<< H \\end{CD}"}
+{"box":{"depth":2.49652,"height":2.99652,"width":6.37701},"displayList":{"depth":2.49652,"height":2.99652,"itemCount":15,"width":6.37701},"input":"\\begin{CD} P @VpVqVV Q \\\\ @VVV @VVV \\\\ R @= S \\end{CD}"}
+{"box":{"depth":4.08953,"height":4.58953,"width":7.23938},"displayList":{"depth":4.08953,"height":4.58953,"itemCount":21,"width":7.23938},"input":"\\begin{CD} P @>>> Q \\\\ @VVV @. @VVV \\\\ R @>>> S \\\\ @VVV @VVV \\\\ T @>>> U \\end{CD}"}
+{"box":{"depth":2.24301,"height":2.74302,"width":5.99028},"displayList":{"depth":2.24301,"height":2.74302,"itemCount":8,"width":5.99028},"input":"\\begin{CD} W @>>> X \\\\ @| @| \\\\ Y @>>> Z \\end{CD}"}
+{"box":{"depth":2.24301,"height":2.74302,"width":12.07259},"displayList":{"depth":2.24301,"height":2.74302,"itemCount":24,"width":12.07259},"input":"\\begin{CD} \\operatorname{Hom}(A,B) @>>> \\mathrm{End}(V) \\\\ @VVV @VVV \\\\ 0 @>>> 1 \\end{CD}"}
 {"box":{"depth":1.22389,"height":0.69444,"width":3.83497},"displayList":{"depth":1.22389,"height":0.69444,"itemCount":10,"width":3.83497},"input":"\\underbracket{a+b+c}_{\\text{note}}"}
 {"box":{"depth":0.08333,"height":1.865,"width":3.83497},"displayList":{"depth":0.08333,"height":1.865,"itemCount":10,"width":3.83497},"input":"\\overbracket{a+b+c}^{\\text{note}}"}
-{"box":{"depth":0.0,"height":1.22333,"width":1.55868},"displayList":{"depth":0.0,"height":1.22333,"itemCount":3,"width":1.55868},"input":"\\overbracket{AB}"}
-{"box":{"depth":0.51,"height":0.68333,"width":1.55868},"displayList":{"depth":0.51,"height":0.68333,"itemCount":3,"width":1.55868},"input":"\\underbracket{AB}"}
+{"box":{"depth":0.0,"height":1.22333,"width":1.6},"displayList":{"depth":0.0,"height":1.22333,"itemCount":3,"width":1.6},"input":"\\overbracket{AB}"}
+{"box":{"depth":0.51,"height":0.68333,"width":1.6},"displayList":{"depth":0.51,"height":0.68333,"itemCount":3,"width":1.6},"input":"\\underbracket{AB}"}
 {"box":{"depth":2.45,"height":2.95,"width":4.70198},"displayList":{"depth":2.45,"height":2.95,"itemCount":45,"width":4.70198},"input":"\\def\\arraystretch{1.5}\\begin{array}{c:c:c} a & b & c \\\\ \\hline d & e & f \\\\ \\hdashline g & h & i \\end{array}"}
 {"box":{"depth":0.0,"height":0.68611,"width":5.29233},"displayList":{"depth":0.0,"height":0.68611,"itemCount":9,"width":5.29233},"input":"\\text{𝐀-𝐙 𝐚-𝐳 𝟎-𝟗}"}
 {"box":{"depth":0.0,"height":0.68889,"width":2.52778},"displayList":{"depth":0.0,"height":0.68889,"itemCount":4,"width":2.52778},"input":"\\text{𝔸-}ℤ\\ 𝕜"}
@@ -980,7 +980,7 @@
 {"box":{"depth":0.18906,"height":0.69141,"width":3.12727},"displayList":{"depth":0.18906,"height":0.69141,"itemCount":6,"width":3.12727},"input":"\\text{$𝔄$-$ℨ$}\\text{ $𝔞$-$𝔷$}"}
 {"box":{"depth":0.0,"height":0.61111,"width":4.64999},"displayList":{"depth":0.0,"height":0.61111,"itemCount":9,"width":4.64999},"input":"\\text{𝙰-𝚉 𝚊-𝚣 𝟶-𝟿}"}
 {"box":{"depth":0.18906,"height":0.69141,"width":3.53866},"displayList":{"depth":0.18906,"height":0.69141,"itemCount":6,"width":3.53866},"input":"\\text{𝕬-𝖅 𝖆-𝖟}"}
-{"box":{"depth":1.49378,"height":1.05001,"width":2.80214},"displayList":{"depth":1.49378,"height":1.05001,"itemCount":11,"width":3.56641},"input":"\\displaystyle\\sum_{\\mathclap{1\\le i\\le j\\le n}} x_{ij}"}
+{"box":{"depth":1.49378,"height":1.05001,"width":2.80214},"displayList":{"depth":1.49378,"height":1.05001,"itemCount":11,"width":2.80214},"input":"\\displaystyle\\sum_{\\mathclap{1\\le i\\le j\\le n}} x_{ij}"}
 {"box":{"depth":0.3,"height":0.98333,"width":4.12189},"displayList":{"depth":0.3,"height":0.98333,"itemCount":5,"width":4.12189},"input":"\\colorbox{aqua}{$F=ma$}"}
 {"box":{"depth":0.34,"height":1.02333,"width":4.20189},"displayList":{"depth":0.34,"height":1.02333,"itemCount":9,"width":4.20189},"input":"\\fcolorbox{red}{aqua}{$F=ma$}"}
 {"box":{"depth":1.49378,"height":1.7314,"width":34.6008},"displayList":{"depth":1.49378,"height":1.7314,"itemCount":63,"width":34.6008},"input":"\\displaystyle {1 +  \\frac{q^2}{(1-q)}+\\frac{q^6}{(1-q)(1-q^2)}+\\cdots }= \\prod_{j=0}^{\\infty}\\frac{1}{(1-q^{5j+2})(1-q^{5j+3})}, \\quad\\quad \\text{for }\\lvert q\\rvert<1."}
@@ -988,11 +988,11 @@
 {"box":{"depth":0.0,"height":0.92,"width":4.0},"displayList":{"depth":0.0,"height":0.92,"itemCount":4,"width":4.0},"input":"\\text{你好世界}"}
 {"box":{"depth":0.0,"height":0.92,"width":4.0},"displayList":{"depth":0.0,"height":0.92,"itemCount":4,"width":4.0},"input":"\\text{😊🎉✅⭐}"}
 {"box":{"depth":0.36205,"height":0.86205,"width":3.83995},"displayList":{"depth":0.36205,"height":0.86205,"itemCount":5,"width":3.83995},"input":"\\begin{equation*} E=mc^2 \\end{equation*}"}
-{"box":{"depth":0.36205,"height":0.86205,"width":6.11773},"displayList":{"depth":0.36205,"height":0.86205,"itemCount":8,"width":6.11773},"input":"\\begin{equation} E=mc^2 \\end{equation}"}
-{"box":{"depth":1.25,"height":1.75,"width":4.62709},"displayList":{"depth":1.25,"height":1.75,"itemCount":12,"width":4.62709},"input":"\\begin{align} x &= 1 \\\\ y &= 2 \\end{align}"}
-{"box":{"depth":1.25,"height":1.75,"width":4.56888},"displayList":{"depth":1.25,"height":1.75,"itemCount":12,"width":4.56888},"input":"\\begin{gather} a=b \\\\ c=d \\end{gather}"}
-{"box":{"depth":1.25,"height":1.75,"width":4.62709},"displayList":{"depth":1.25,"height":1.75,"itemCount":9,"width":4.62709},"input":"\\begin{align} x &= 1 \\nonumber \\\\ y &= 2 \\end{align}"}
-{"box":{"depth":1.25,"height":1.75,"width":7.3249},"displayList":{"depth":1.25,"height":1.75,"itemCount":17,"width":7.3249},"input":"\\begin{align} x &= 1 \\tag{custom} \\\\ y &= 2 \\end{align}"}
+{"box":{"depth":0.36205,"height":0.86205,"width":6.21773},"displayList":{"depth":0.36205,"height":0.86205,"itemCount":8,"width":6.21773},"input":"\\begin{equation} E=mc^2 \\end{equation}"}
+{"box":{"depth":1.1,"height":1.6,"width":4.78265},"displayList":{"depth":1.1,"height":1.6,"itemCount":12,"width":4.78265},"input":"\\begin{align} x &= 1 \\\\ y &= 2 \\end{align}"}
+{"box":{"depth":1.1,"height":1.6,"width":4.66888},"displayList":{"depth":1.1,"height":1.6,"itemCount":12,"width":4.66888},"input":"\\begin{gather} a=b \\\\ c=d \\end{gather}"}
+{"box":{"depth":1.1,"height":1.6,"width":4.78265},"displayList":{"depth":1.1,"height":1.6,"itemCount":9,"width":4.78265},"input":"\\begin{align} x &= 1 \\nonumber \\\\ y &= 2 \\end{align}"}
+{"box":{"depth":1.1,"height":1.6,"width":7.38046},"displayList":{"depth":1.1,"height":1.6,"itemCount":17,"width":7.38046},"input":"\\begin{align} x &= 1 \\tag{custom} \\\\ y &= 2 \\end{align}"}
 {"box":{"depth":0.97003,"height":1.59901,"width":3.78692},"displayList":{"depth":0.97003,"height":1.59901,"itemCount":8,"width":3.78692},"input":"\\displaystyle \\iiint_{-\\infty}^{infty}"}
 {"box":{"depth":0.29971,"height":0.80429,"width":2.42017},"displayList":{"depth":0.29971,"height":0.80429,"itemCount":5,"width":2.42017},"input":"\\textstyle\\sum_{n=1}^{\\infty}"}
 {"box":{"depth":1.04711,"height":1.4314,"width":1.31461},"displayList":{"depth":1.04711,"height":1.4314,"itemCount":5,"width":1.31461},"input":"\\textstyle\\sum\\limits_{n=1}^{\\infty}"}
@@ -1033,7 +1033,7 @@
 {"box":{"depth":0.0,"height":0.69444,"width":1.39052},"displayList":{"depth":0.0,"height":0.69444,"itemCount":4,"width":1.39052},"input":"\\sout{abc}"}
 {"box":{"depth":0.0,"height":0.69444,"width":1.50001},"displayList":{"depth":0.0,"height":0.69444,"itemCount":4,"width":1.50001},"input":"\\text{\\sout{abc}}"}
 {"box":{"depth":0.0,"height":0.86411,"width":0.97153},"displayList":{"depth":0.0,"height":0.86411,"itemCount":3,"width":0.97153},"input":"\\sout{x^2}"}
-{"box":{"depth":2.50365,"height":3.00365,"width":5.86735},"displayList":{"depth":2.50365,"height":3.00365,"itemCount":12,"width":5.86735},"input":"\\begin{CD} A @>a>> B \\\\ @VbVV @VcVV \\\\ C @>d>> D \\end{CD}"}
+{"box":{"depth":2.35365,"height":2.85365,"width":5.86735},"displayList":{"depth":2.35365,"height":2.85365,"itemCount":12,"width":5.86735},"input":"\\begin{CD} A @>a>> B \\\\ @VbVV @VcVV \\\\ C @>d>> D \\end{CD}"}
 {"box":{"depth":1.38211,"height":1.7314,"width":1.99965},"displayList":{"depth":1.38211,"height":1.7314,"itemCount":6,"width":1.99965},"input":"∏_{k=1}^{n} k"}
 {"box":{"depth":1.35767,"height":1.05001,"width":2.3488},"displayList":{"depth":1.35767,"height":1.05001,"itemCount":4,"width":2.3488},"input":"∐_i S_i"}
 {"box":{"depth":1.34711,"height":1.90834,"width":2.55373},"displayList":{"depth":1.34711,"height":1.90834,"itemCount":6,"width":2.55373},"input":"∑_{m=1}^{M} m"}
@@ -1047,3 +1047,29 @@
 {"box":{"depth":1.33001,"height":1.05001,"width":2.58439},"displayList":{"depth":1.33001,"height":1.05001,"itemCount":4,"width":2.58439},"input":"⨄_{m} P_m"}
 {"box":{"depth":1.33001,"height":1.05001,"width":2.5385},"displayList":{"depth":1.33001,"height":1.05001,"itemCount":4,"width":2.5385},"input":"⨆_{n} Q_n"}
 {"box":{"depth":0.0,"height":0.43056,"width":0.57153},"displayList":{"depth":0.0,"height":0.43056,"itemCount":1,"width":0.57153},"input":"\\textcolor{#ff000050}{x}"}
+{"box":{"depth":0.08333,"height":0.675,"width":9.66668},"displayList":{"depth":0.08333,"height":0.675,"itemCount":10,"width":9.66668},"input":"○\\div□=5\\quad□\\div○=5","override":"RaTeX-only U+25CB alias not adopted"}
+{"box":{"depth":0.95003,"height":1.45,"width":15.5044},"displayList":{"depth":0.95003,"height":1.45,"itemCount":34,"width":15.5044},"input":"{\\text{\\textit{Inflation}}} = 100 * \\left({\\text{\\textit{CPI}}_{t} - \\text{\\textit{CPI}}_{t-1} \\over \\text{\\textit{CPI}}_{t-1}}\\right)"}
+{"box":{"depth":0.86113,"height":1.36113,"width":11.13246},"displayList":{"depth":0.86225,"height":1.36113,"itemCount":8,"width":11.13246},"input":"\\dots,\\quad \\dots+\\quad \\dots\\int\\quad \\dots)"}
+{"box":{"depth":0.19444,"height":0.43056,"width":7.51601},"displayList":{"depth":0.19444,"height":0.43056,"itemCount":6,"width":7.51601},"input":"\\cdots,\\quad \\dotsc,\\quad \\dotso;"}
+{"box":{"depth":0.0,"height":0.69056,"width":2.94446},"displayList":{"depth":0.0,"height":0.69056,"itemCount":4,"width":2.94446},"input":"\\dddot{x}\\quad\\ddddot{x}"}
+{"box":{"depth":1.38211,"height":1.7314,"width":1.99965},"displayList":{"depth":1.38211,"height":1.7314,"itemCount":6,"width":1.99965},"input":"\\prod_{k=1}^{n} k"}
+{"box":{"depth":1.35767,"height":1.05001,"width":2.3488},"displayList":{"depth":1.35767,"height":1.05001,"itemCount":4,"width":2.3488},"input":"\\coprod_i S_i"}
+{"box":{"depth":1.34711,"height":1.90834,"width":2.55373},"displayList":{"depth":1.34711,"height":1.90834,"itemCount":6,"width":2.55373},"input":"\\sum_{m=1}^{M} m"}
+{"box":{"depth":1.35767,"height":1.7314,"width":2.2476},"displayList":{"depth":1.35767,"height":1.7314,"itemCount":7,"width":2.2476},"input":"\\bigwedge_{i=1}^n \\varphi_i"}
+{"box":{"depth":1.49378,"height":1.05001,"width":2.3075},"displayList":{"depth":1.49378,"height":1.05001,"itemCount":4,"width":2.3075},"input":"\\bigvee_{j} \\psi_j"}
+{"box":{"depth":1.33001,"height":1.05001,"width":2.43072},"displayList":{"depth":1.33001,"height":1.05001,"itemCount":4,"width":2.43072},"input":"\\bigcap_{n} U_n"}
+{"box":{"depth":1.33001,"height":1.05001,"width":2.36149},"displayList":{"depth":1.33001,"height":1.05001,"itemCount":4,"width":2.36149},"input":"\\bigcup_{\\alpha} V_{\\alpha}"}
+{"box":{"depth":1.35767,"height":1.7314,"width":2.75519},"displayList":{"depth":1.35767,"height":1.7314,"itemCount":7,"width":2.75519},"input":"\\bigodot_{i=1}^r G_i"}
+{"box":{"depth":1.49378,"height":1.05001,"width":2.88737},"displayList":{"depth":1.49378,"height":1.05001,"itemCount":4,"width":2.88737},"input":"\\bigoplus_{j} H_j"}
+{"box":{"depth":1.38211,"height":1.05001,"width":2.7948},"displayList":{"depth":1.38211,"height":1.05001,"itemCount":4,"width":2.7948},"input":"\\bigotimes_{k} L_k"}
+{"box":{"depth":1.33001,"height":1.05001,"width":2.58439},"displayList":{"depth":1.33001,"height":1.05001,"itemCount":4,"width":2.58439},"input":"\\biguplus_{m} P_m"}
+{"box":{"depth":1.33001,"height":1.05001,"width":2.5385},"displayList":{"depth":1.33001,"height":1.05001,"itemCount":4,"width":2.5385},"input":"\\bigsqcup_{n} Q_n"}
+{"box":{"depth":1.34711,"height":1.7314,"width":1.44445},"displayList":{"depth":1.34711,"height":1.7314,"itemCount":5,"width":1.44445},"input":"\\displaystyle\\sum_{n=1}^{\\infty}"}
+{"box":{"depth":0.29971,"height":0.80429,"width":2.42017},"displayList":{"depth":0.29971,"height":0.80429,"itemCount":5,"width":2.42017},"input":"\\textstyle\\sum_{n=1}^{\\infty}"}
+{"box":{"depth":0.22501,"height":0.525,"width":1.7279},"displayList":{"depth":0.22501,"height":0.525,"itemCount":5,"width":1.7279},"input":"\\scriptstyle\\sum_{n=1}^{\\infty}"}
+{"box":{"depth":0.21822,"height":0.41728,"width":1.51679},"displayList":{"depth":0.21822,"height":0.41728,"itemCount":5,"width":1.51679},"input":"\\scriptscriptstyle\\sum_{n=1}^{\\infty}"}
+{"box":{"depth":0.59971,"height":1.10429,"width":4.01741},"displayList":{"depth":0.59971,"height":1.10429,"itemCount":7,"width":4.01741},"input":"\\displaystyle\\sum\\nolimits_{n=1}^{\\infty} x_n"}
+{"box":{"depth":0.79711,"height":0.75,"width":3.56328},"displayList":{"depth":0.79711,"height":0.75,"itemCount":10,"width":3.56328},"input":"\\displaystyle\\lim_{x\\to0} f(x)"}
+{"box":{"depth":0.79711,"height":0.75,"width":3.56328},"displayList":{"depth":0.79711,"height":0.75,"itemCount":10,"width":3.56328},"input":"\\textstyle\\lim\\limits_{x\\to0} f(x)"}
+{"box":{"depth":0.0,"height":0.54429,"width":2.64446},"displayList":{"depth":0.0,"height":0.54429,"itemCount":4,"width":2.64446},"input":"\\scriptstyle\\dddot{x}\\quad\\scriptscriptstyle\\ddddot{x}"}
+{"box":{"depth":0.3356,"height":0.43056,"width":4.18752},"displayList":{"depth":0.3356,"height":0.43056,"itemCount":6,"width":4.18752},"input":"x_{\\dddot{y}}\\quad x_{\\ddddot{y}}"}

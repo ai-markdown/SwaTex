@@ -238,9 +238,18 @@ func layoutPmb(_ body: [ParseNode], _ options: LayoutOptions) -> LayoutBox {
 // ============================================================================
 
 func layoutFont(_ font: String, _ body: ParseNode, _ options: LayoutOptions) -> LayoutBox {
+    if font == "text" || font == "\\text" {
+        if case let .ordGroup(nodes, _) = body.kind {
+            return layoutText(nodes, options)
+        }
+        return layoutNode(body, options)
+    }
+
     let fontId: FontId? =
         switch font {
-        case "mathrm", "\\mathrm", "textrm", "\\textrm", "rm", "\\rm": .mainRegular
+        case "textnormal", "\\textnormal", "textmd", "\\textmd", "textup", "\\textup",
+            "mathrm", "\\mathrm", "textrm", "\\textrm", "rm", "\\rm":
+            .mainRegular
         case "mathbf", "\\mathbf", "textbf", "\\textbf", "bf", "\\bf": .mainBold
         case "mathit", "\\mathit", "it", "\\it": .mathItalic
         case "textit", "\\textit", "\\emph": .mainItalic
@@ -305,47 +314,59 @@ func layoutWithFont(_ node: ParseNode, _ fontId: FontId, _ options: LayoutOption
 // Overline / Underline
 // ============================================================================
 
+/// Rule placement shared by `\overline` and `\underline` (KaTeX vlist geometry).
+struct RuleGeometry {
+    var thickness: Double
+    /// Distance from the body's edge to the rule center.
+    var lineCenterOffset: Double
+    /// Extent added to the body's height (overline) or depth (underline).
+    var totalExtent: Double
+
+    static func overline(_ options: LayoutOptions) -> RuleGeometry {
+        let thickness = options.metrics.defaultRuleThickness
+        // KaTeX vlist: 3r clearance, then the r-thick rule; one additional
+        // rule unit is retained at the outer edge.
+        return RuleGeometry(
+            thickness: thickness, lineCenterOffset: 3.5 * thickness, totalExtent: 5.0 * thickness)
+    }
+
+    static func underline(_ options: LayoutOptions) -> RuleGeometry {
+        let thickness = options.metrics.defaultRuleThickness
+        return RuleGeometry(
+            thickness: thickness, lineCenterOffset: 4.0 * thickness, totalExtent: 4.5 * thickness)
+    }
+}
+
 func layoutOverline(_ body: ParseNode, _ options: LayoutOptions) -> LayoutBox {
     let cramped = options.with(style: options.style.cramped)
     let bodyBox = layoutNode(body, cramped)
-    let metrics = options.metrics
-    let rule = metrics.defaultRuleThickness
-
-    // Total height: body height + 2*rule clearance + rule thickness = body.height + 3*rule
-    let height = bodyBox.height + 3.0 * rule
+    let rule = RuleGeometry.overline(options)
     return LayoutBox(
         width: bodyBox.width,
-        height: height,
+        height: bodyBox.height + rule.totalExtent,
         depth: bodyBox.depth,
-        content: .overline(body: bodyBox, ruleThickness: rule),
+        content: .overline(
+            body: bodyBox, ruleThickness: rule.thickness, offset: rule.lineCenterOffset),
         color: options.color)
 }
 
 func layoutUnderline(_ body: ParseNode, _ options: LayoutOptions) -> LayoutBox {
     let bodyBox = layoutNode(body, options)
-    let metrics = options.metrics
-    let rule = metrics.defaultRuleThickness
-    let offset = 4.0 * rule
-
-    let depth = bodyBox.depth + offset + 0.5 * rule
+    let rule = RuleGeometry.underline(options)
     return LayoutBox(
         width: bodyBox.width,
         height: bodyBox.height,
-        depth: depth,
-        content: .underline(body: bodyBox, ruleThickness: rule, offset: offset),
+        depth: bodyBox.depth + rule.totalExtent,
+        content: .underline(
+            body: bodyBox, ruleThickness: rule.thickness, offset: rule.lineCenterOffset),
         color: options.color)
 }
 
 /// `\href` / `\url`: link color on the glyphs and an underline in the same color (KaTeX-style).
 func layoutHref(_ body: [ParseNode], _ options: LayoutOptions) -> LayoutBox {
     let linkColor = Color(name: "blue") ?? Color(r: 0, g: 0, b: 1)
-    // Slight tracking matches KaTeX/browser monospace link width in golden PNGs.
-    let bodyOpts = options.with(color: linkColor).with(interGlyphKernEm: 0.05)
-    let bodyBox = layoutExpression(body, bodyOpts, isRealGroup: true)
-    if boxContainsFont(bodyBox, .typewriterRegular) {
-        return layoutLinkUnderlineLaidOut(bodyBox, options, linkColor)
-    }
-    return layoutUnderlineLaidOut(bodyBox, options, linkColor)
+    let bodyBox = layoutExpression(body, options.with(color: linkColor), isRealGroup: true)
+    return layoutLinkUnderlineLaidOut(bodyBox, options, linkColor)
 }
 
 /// Same geometry as ``layoutUnderline(_:_:)``, but for an already computed inner box.
@@ -367,19 +388,6 @@ func layoutUnderlineLaidOutWithRule(
         depth: depth,
         content: .underline(body: bodyBox, ruleThickness: rule, offset: offset),
         color: color)
-}
-
-func boxContainsFont(_ lbox: LayoutBox, _ fontId: FontId) -> Bool {
-    switch lbox.content {
-    case let .glyph(fid, _):
-        fid == fontId
-    case let .hbox(children):
-        children.contains { boxContainsFont($0, fontId) }
-    case let .scaled(body, _), let .raiseBox(body, _):
-        boxContainsFont(body, fontId)
-    default:
-        false
-    }
 }
 
 func linkUnderlineSkipCuts(
@@ -440,14 +448,18 @@ func layoutLinkUnderlineLaidOut(
 ) -> LayoutBox {
     let metrics = options.metrics
     let rule = metrics.defaultRuleThickness
-    let offset = 2.5 * rule
+    // Browser text decoration uses the font underline position measured from
+    // the baseline. Keep it out of a descender's ink box when the run is
+    // deeper than that nominal position.
+    let centerFromBaseline = max(bodyBox.depth, 3.125 * rule)
+    let offset = centerFromBaseline - bodyBox.depth
     let segments = linkUnderlineSegments(bodyBox)
     if segments.count <= 1 {
         return layoutUnderlineLaidOutWithRule(bodyBox, rule, offset, color)
     }
 
     let height = bodyBox.height
-    let depth = bodyBox.depth + offset + 0.5 * rule
+    let depth = max(bodyBox.depth, centerFromBaseline + 0.5 * rule)
     let ruleY = height + bodyBox.depth + offset
     let width = bodyBox.width
     return LayoutBox(

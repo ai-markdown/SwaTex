@@ -138,6 +138,43 @@ private func dotscSpaceAfter(_ next: String) -> Bool {
     }
 }
 
+private func dotsoSpaceAfter(_ next: String) -> Bool {
+    next == "," || dotscSpaceAfter(next)
+}
+
+/// AMSMath's contextual `\dots` selection (KaTeX `macros.ts`): pick the dots
+/// variant from the (once-expanded) following token.
+private func contextualDotsFor(_ next: String) -> String {
+    if next == "," {
+        return "\\dotsc"
+    }
+    switch next {
+    case "\\not", "+", "=", "<", ">", "-", "*", ":", "\\DOTSB", "\\coprod", "\\bigvee",
+        "\\bigwedge", "\\biguplus", "\\bigcap", "\\bigcup", "\\prod", "\\sum",
+        "\\bigotimes", "\\bigoplus", "\\bigodot", "\\bigsqcup", "\\And",
+        "\\longrightarrow", "\\Longrightarrow", "\\longleftarrow", "\\Longleftarrow",
+        "\\longleftrightarrow", "\\Longleftrightarrow", "\\mapsto", "\\longmapsto",
+        "\\hookrightarrow", "\\doteq", "\\mathbin", "\\mathrel", "\\relbar", "\\Relbar",
+        "\\xrightarrow", "\\xleftarrow":
+        return "\\dotsb"
+    case "\\DOTSI", "\\int", "\\oint", "\\iint", "\\iiint", "\\iiiint", "\\idotsint":
+        return "\\dotsi"
+    case "\\DOTSX":
+        return "\\dotsx"
+    default:
+        break
+    }
+    if next.hasPrefix("\\not") {
+        return "\\dotsb"
+    }
+    if let symbol = SymbolInfo(name: next, mode: .math),
+        symbol.group == .bin || symbol.group == .rel
+    {
+        return "\\dotsb"
+    }
+    return "\\dotso"
+}
+
 /// The MacroExpander (or "gullet") manages macro expansion.
 ///
 /// It sits between the Lexer (mouth) and the Parser (stomach).
@@ -659,8 +696,25 @@ extension MacroExpander {
             return me.mode == .text ? args[0] : args[1]
         }
 
-        // KaTeX/amsmath: \dotsc adds a thin space before selected right
-        // delimiters/punctuation, but not before a following comma.
+        // AMSMath's contextual \dots selection. It expands the following token
+        // once before classifying it, matching KaTeX's expandAfterFuture().
+        m["\\dots"] = .function { me throws(ParseError) in
+            _ = try me.expandOnce(expandableOnly: false)
+            return lexStringToStackTokens(contextualDotsFor(me.future().text))
+        }
+
+        // \dotso and \cdots add a thin space before punctuation/right
+        // delimiters. \dotsc intentionally excludes a following comma.
+        m["\\dotso"] = .function { me throws(ParseError) in
+            let text = dotsoSpaceAfter(me.future().text) ? "\\ldots\\," : "\\ldots"
+            return lexStringToStackTokens(text)
+        }
+
+        m["\\cdots"] = .function { me throws(ParseError) in
+            let text = dotsoSpaceAfter(me.future().text) ? "\\@cdots\\," : "\\@cdots"
+            return lexStringToStackTokens(text)
+        }
+
         m["\\dotsc"] = .function { me throws(ParseError) in
             let next = me.future().text
             let text = dotscSpaceAfter(next) ? "\\ldots\\," : "\\ldots"

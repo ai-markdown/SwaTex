@@ -211,6 +211,100 @@ private func cdSideLabelScaled(_ body: ParseNode, _ options: LayoutOptions) -> L
 /// pass-1 vertical CD arrows.
 private let cdBigTotalHeight = 1.8
 
+/// Nudge a compact horizontal-arrow label 0.1em left without changing its advance.
+private func cdShiftLabelInkLeft(_ label: LayoutBox, _ color: Color) -> LayoutBox {
+    let shift = -0.1
+    return LayoutBox(
+        width: label.width, height: label.height, depth: label.depth,
+        content: .hbox([.kern(shift), label, .kern(-shift)]),
+        color: color)
+}
+
+/// Halve the shaft stroke of a `\cdrightarrow`/`\cdleftarrow` path (points within
+/// 0.021em of the axis) for compact-label diagrams.
+private func thinCDArrowShaft(_ commands: [PathCommand]) -> [PathCommand] {
+    func thin(_ y: Double) -> Double { abs(y) <= 0.021 ? y * 0.5 : y }
+    return commands.map { command in
+        switch command {
+        case let .moveTo(x, y): .moveTo(x: x, y: thin(y))
+        case let .lineTo(x, y): .lineTo(x: x, y: thin(y))
+        case let .cubicTo(x1, y1, x2, y2, x, y):
+            .cubicTo(x1: x1, y1: thin(y1), x2: x2, y2: thin(y2), x: x, y: thin(y))
+        case let .quadTo(x1, y1, x, y): .quadTo(x1: x1, y1: thin(y1), x: x, y: thin(y))
+        case .close: .close
+        }
+    }
+}
+
+/// Whether a CD arrow label exists and is not an empty group.
+func cdLabelHasInk(_ label: ParseNode?) -> Bool {
+    guard let label else { return false }
+    if case let .ordGroup(body, _) = label.kind {
+        return !body.isEmpty
+    }
+    return true
+}
+
+/// KaTeX `makeStackedDelim` geometry for the `\Big\uparrow` / `\Big\downarrow`
+/// used by `{CD}`. The arrow end and U+23D0 repeat come from Size1-Regular; the
+/// middle shaft is a filled 0.043em strip with 0.008em overlaps.
+private func cdStackedVertArrowBox(
+    _ requestedHeight: Double, down: Bool, _ options: LayoutOptions
+) -> LayoutBox {
+    let arrowUp: UInt32 = 0x2191
+    let arrowDown: UInt32 = 0x2193
+    let repeatCode: UInt32 = 0x23D0
+    let lap = 0.008
+
+    func glyphBox(_ charCode: UInt32) -> LayoutBox {
+        let m = FontId.size1Regular.metrics(forChar: charCode)
+        return LayoutBox(
+            width: m?.width ?? 0.5, height: m?.height ?? 0.6, depth: m?.depth ?? 0,
+            content: .glyph(fontId: .size1Regular, charCode: charCode),
+            color: options.color)
+    }
+
+    let arrow = glyphBox(down ? arrowDown : arrowUp)
+    let repeatBox = glyphBox(repeatCode)
+    let top = down ? repeatBox : arrow
+    let bottom = down ? arrow : repeatBox
+    let topTotal = top.height + top.depth
+    let bottomTotal = bottom.height + bottom.depth
+    let repeatTotal = repeatBox.height + repeatBox.depth
+    let minimum = topTotal + bottomTotal
+    let repeatCount = max(((max(requestedHeight, minimum) - minimum) / repeatTotal).rounded(.up), 0)
+    let realHeight = minimum + repeatCount * repeatTotal
+    let innerHeight = realHeight - minimum + 2.0 * lap
+    let width = max(top.width, bottom.width, repeatBox.width)
+
+    let shaft = LayoutBox(
+        width: repeatBox.width, height: innerHeight, depth: 0,
+        content: .svgPath(
+            commands: [
+                .moveTo(x: 0.312, y: -innerHeight),
+                .lineTo(x: 0.355, y: -innerHeight),
+                .lineTo(x: 0.355, y: 0),
+                .lineTo(x: 0.312, y: 0),
+                .close,
+            ], fill: true),
+        color: options.color)
+    // Size1's stacked-arrow pieces have a right side-bearing that does not
+    // participate in the DOM centering box. Compensate so the visible shaft,
+    // arrowhead, and object-column center share one x coordinate.
+    let visibleCenterAdjust = -0.0875
+    func centered(_ box: LayoutBox) -> VBoxChild {
+        VBoxChild(.box(box), shift: (width - box.width) / 2.0 + visibleCenterAdjust)
+    }
+    let children = [
+        centered(top), VBoxChild(.kern(-lap)), centered(shaft), VBoxChild(.kern(-lap)),
+        centered(bottom),
+    ]
+    let depth = max(realHeight / 2.0 - options.metrics.axisHeight, 0)
+    return LayoutBox(
+        width: width, height: realHeight - depth, depth: depth,
+        content: .vbox(children), color: options.color)
+}
+
 /// Stretch ↑ / ↓ to span the CD arrow row (`totalHeight` = height + depth in em).
 ///
 /// Reuses the same filled KaTeX stretchy path as horizontal `\cdrightarrow` (see
@@ -231,11 +325,7 @@ private func cdStretchVertArrowBox(
             color: options.color)
     }
     // Fallback (should not happen): `\cdrightarrow` is always in the stretchy table.
-    if down {
-        return makeStretchyDelim("\\downarrow", cdBigTotalHeight, options)
-    } else {
-        return makeStretchyDelim("\\uparrow", cdBigTotalHeight, options)
-    }
+    return makeStretchyDelim(down ? "\\downarrow" : "\\uparrow", totalHeight, options)
 }
 
 /// Render a single cdArrow cell.
@@ -251,19 +341,15 @@ private func cdStretchVertArrowBox(
 /// `targetColWidth`: when `> 0`, center the cell in this column width (horizontal: side kerns;
 /// vertical: kerns around shaft + labels).
 ///
-/// `targetDepth` (vertical only): depth portion of `targetSize` when `> 0`, so that
-/// `boxH = targetSize - targetDepth` and `boxD = targetDepth`.
+/// `compactLabelsEnabled`: diagram-wide switch for KaTeX's tight `.cd-arrow-pad`
+/// label placement on horizontal arrows (see `layoutCD`).
 func layoutCDArrow(
     _ direction: String, _ labelAbove: ParseNode?, _ labelBelow: ParseNode?,
-    _ targetSize: Double, _ targetColWidth: Double, _ targetDepth: Double,
+    _ targetSize: Double, _ targetColWidth: Double, _ compactLabelsEnabled: Bool,
     _ options: LayoutOptions
 ) -> LayoutBox {
     let metrics = options.metrics
     let axis = metrics.axisHeight
-
-    // Vertical CD: kern between side label and shaft (KaTeX `cd-label-*` sits tight; 0.25em
-    // widens object columns vs `tests/golden/fixtures` CD).
-    let cdVertSideKernEm = 0.11
 
     switch direction {
     case "right", "left", "horiz_eq":
@@ -275,7 +361,14 @@ func layoutCDArrow(
         let supRatio = supStyle.sizeMultiplier / options.style.sizeMultiplier
         let subRatio = subStyle.sizeMultiplier / options.style.sizeMultiplier
 
-        let aboveBox = labelAbove.map { layoutNode($0, supOpts) }
+        let aboveHasInk = cdLabelHasInk(labelAbove)
+        let belowHasInk = cdLabelHasInk(labelBelow)
+        let useCompactCDLabels =
+            compactLabelsEnabled && direction != "horiz_eq" && !belowHasInk
+        let aboveBox = labelAbove.map { node -> LayoutBox in
+            let box = layoutNode(node, supOpts)
+            return useCompactCDLabels && aboveHasInk ? cdShiftLabelInkLeft(box, options.color) : box
+        }
         let belowBox = labelBelow.map { layoutNode($0, subOpts) }
 
         let aboveW = aboveBox.map { $0.width * supRatio } ?? 0.0
@@ -302,7 +395,7 @@ func layoutCDArrow(
         let naturalW = max(max(upperNeed, lowerNeed), 0.0)
         let shaftW = targetSize > 0.0 ? targetSize : max(naturalW, minShaftW)
 
-        let commands: [PathCommand]
+        var commands: [PathCommand]
         let actualArrowH: Double
         let fillArrow: Bool
         if let (c, h) = katexStretchyPath(pathLabel, widthEm: shaftW) {
@@ -342,6 +435,10 @@ func layoutCDArrow(
             (commands, actualArrowH, fillArrow) = (cmds, arrowH, false)
         }
 
+        if (direction == "right" || direction == "left") && useCompactCDLabels {
+            commands = thinCDArrowShaft(commands)
+        }
+
         // Arrow box centered at y=0 (same as layoutXArrow)
         let arrowHalf = actualArrowH / 2.0
         let arrowBox = LayoutBox(
@@ -350,19 +447,24 @@ func layoutCDArrow(
             color: options.color)
 
         // Total height/depth for opLimits (mirrors layoutXArrow / KaTeX arrow.ts)
-        let gap = 0.111
+        // The CD label span already carries script-style line height; using the
+        // generic x-arrow 2mu kern leaves a visible gap that KaTeX's
+        // `.cd-arrow-pad` box does not have. Keep only one rule-thickness of
+        // clearance between the label ink and shaft.
+        let (supGap, subGap) =
+            useCompactCDLabels ? (-metrics.defaultRuleThickness, 0.025) : (0.111, 0.111)
         let supH = aboveBox.map { $0.height * supRatio } ?? 0.0
         let supD = aboveBox.map { $0.depth * supRatio } ?? 0.0
         // KaTeX arrow.ts: label depth only shifts the label up when depth > 0.25
         // (at the label's own scale). Otherwise the label baseline stays fixed and
         // depth extends into the gap without increasing the cell height.
         let supDContrib = (aboveBox?.depth ?? 0.0) > 0.25 ? supD : 0.0
-        let height = axis + arrowHalf + gap + supH + supDContrib
+        let height = axis + arrowHalf + supGap + supH + supDContrib
         let subHRaw = belowBox.map { $0.height * subRatio } ?? 0.0
         let subDRaw = belowBox.map { $0.depth * subRatio } ?? 0.0
         let depth =
             if belowBox != nil {
-                max(arrowHalf - axis, 0.0) + gap + subHRaw + subDRaw
+                max(arrowHalf - axis, 0.0) + subGap + subHRaw + subDRaw
             } else {
                 max(arrowHalf - axis, 0.0)
             }
@@ -371,7 +473,7 @@ func layoutCDArrow(
             width: shaftW, height: height, depth: depth,
             content: .opLimits(
                 base: arrowBox, sup: aboveBox, sub: belowBox,
-                baseShift: -axis, supKern: gap, subKern: gap, slant: 0.0,
+                baseShift: -axis, supKern: supGap, subKern: subGap, slant: 0.0,
                 supScale: supRatio, subScale: subRatio),
             color: options.color)
 
@@ -391,23 +493,28 @@ func layoutCDArrow(
         // Pass 1: \Big (~1.8em). Pass 2: stretch ↑/↓ / ‖ to the full arrow-row span (em).
         let bigTotal = cdBigTotalHeight  // SIZE_TO_MAX_HEIGHT[2] = 1.8em
 
+        let hasSideLabel = cdLabelHasInk(labelAbove) || cdLabelHasInk(labelBelow)
         let shaftBox: LayoutBox =
             switch direction {
             case "vert_eq" where targetSize > 0.0:
                 makeVertDelimBox(
-                    max(targetSize, bigTotal), isDouble: true, isSizedDelim: false, options)
+                    max(targetSize, bigTotal), isDouble: true, kind: .stretchy, options)
             case "vert_eq":
                 makeStretchyDelim("\\Vert", bigTotal, options)
+            case "down" where hasSideLabel:
+                cdStretchVertArrowBox(max(targetSize, bigTotal), down: true, options)
+            case "up" where hasSideLabel:
+                cdStretchVertArrowBox(max(targetSize, bigTotal), down: false, options)
             case "down" where targetSize > 0.0:
-                cdStretchVertArrowBox(max(targetSize, 1.0), down: true, options)
+                cdStackedVertArrowBox(max(targetSize, 1.0), down: true, options)
             case "up" where targetSize > 0.0:
-                cdStretchVertArrowBox(max(targetSize, 1.0), down: false, options)
+                cdStackedVertArrowBox(max(targetSize, 1.0), down: false, options)
             case "down":
-                cdStretchVertArrowBox(bigTotal, down: true, options)
+                cdStackedVertArrowBox(bigTotal, down: true, options)
             case "up":
-                cdStretchVertArrowBox(bigTotal, down: false, options)
+                cdStackedVertArrowBox(bigTotal, down: false, options)
             default:
-                cdStretchVertArrowBox(bigTotal, down: true, options)
+                cdStackedVertArrowBox(bigTotal, down: true, options)
             }
         let boxH = shaftBox.height
         let boxD = shaftBox.depth
@@ -424,36 +531,32 @@ func layoutCDArrow(
 
         let leftW = leftBox?.width ?? 0.0
         let rightW = rightBox?.width ?? 0.0
-        let leftPart = leftW + (leftW > 0.0 ? cdVertSideKernEm : 0.0)
-        let rightPart = (rightW > 0.0 ? cdVertSideKernEm : 0.0) + rightW
-        let innerW = leftPart + shaftW + rightPart
-
-        // Center shaft within the column width (pass 2) using side kerns.
-        let (kernLeft, kernRight, totalW): (Double, Double, Double)
-        if targetColWidth > innerW {
-            let extra = targetColWidth - innerW
-            let kl = extra / 2.0
-            let kr = extra - kl
-            (kernLeft, kernRight, totalW) = (kl, kr, targetColWidth)
-        } else {
-            (kernLeft, kernRight, totalW) = (0.0, 0.0, innerW)
-        }
-
+        let totalW: Double
         var children: [LayoutBox] = []
-        if kernLeft > 0.0 {
-            children.append(.kern(kernLeft))
-        }
-        if let lb = leftBox {
-            children.append(lb)
-            children.append(.kern(cdVertSideKernEm))
-        }
-        children.append(shaftBox)
-        if let rb = rightBox {
-            children.append(.kern(cdVertSideKernEm))
-            children.append(rb)
-        }
-        if kernRight > 0.0 {
-            children.append(.kern(kernRight))
+        if leftW > 0.0 || rightW > 0.0 {
+            // Labeled shafts keep the side-kern model; unlabeled shafts use the
+            // centered object-column model below.
+            let sideKern = 0.11
+            let leftPart = leftW + (leftW > 0.0 ? sideKern : 0.0)
+            let rightPart = (rightW > 0.0 ? sideKern : 0.0) + rightW
+            let innerW = leftPart + shaftW + rightPart
+            totalW = max(targetColWidth, innerW)
+            let outerPad = (totalW - innerW) / 2.0
+            children.append(.kern(outerPad))
+            if let lb = leftBox {
+                children.append(lb)
+                children.append(.kern(sideKern))
+            }
+            children.append(shaftBox)
+            if let rb = rightBox {
+                children.append(.kern(sideKern))
+                children.append(rb)
+            }
+            children.append(.kern(totalW - innerW - outerPad))
+        } else {
+            totalW = max(targetColWidth, shaftW)
+            let pad = (totalW - shaftW) / 2.0
+            children = [.kern(pad), shaftBox, .kern(totalW - shaftW - pad)]
         }
 
         return LayoutBox(
@@ -485,6 +588,21 @@ func layoutCD(_ body: [[ParseNode]], _ options: LayoutOptions) -> LayoutBox {
         return .empty
     }
 
+    func isCDArrow(_ cell: ParseNode, directions: Set<String>) -> Bool {
+        if case let .cdArrow(direction, above, below) = cell.kind {
+            return directions.contains(direction) && (cdLabelHasInk(above) || cdLabelHasInk(below))
+        }
+        return false
+    }
+    let hasVerticalSideLabels = body.joined().contains {
+        isCDArrow($0, directions: ["down", "up"])
+    }
+    let hasHorizontalInkLabel = body.joined().contains {
+        isCDArrow($0, directions: ["right", "left"])
+    }
+    let compactLabelsEnabled =
+        !(hasVerticalSideLabels || (numCols > 3 && hasHorizontalInkLabel))
+
     // `\jot` (3pt): added to every row depth below; include in vertical-arrow stretch span.
     let jot = 3.0 * pt
 
@@ -509,7 +627,7 @@ func layoutCD(_ body: [[ParseNode]], _ options: LayoutOptions) -> LayoutBox {
                     labelBelow,
                     0.0,  // natural size in pass 1
                     0.0,  // natural column width
-                    0.0,  // natural depth split
+                    compactLabelsEnabled,
                     options)
             // KaTeX CD object cells are `styling` nodes; `sizingGroup` builds the body with
             // `buildExpression(..., false)` (see katex `functions/sizing.js`), so no inter-atom
@@ -555,7 +673,7 @@ func layoutCD(_ body: [[ParseNode]], _ options: LayoutOptions) -> LayoutBox {
                     labelBelow,
                     cellBoxes[r][c].width,
                     colTargetW[c],
-                    0.0,
+                    compactLabelsEnabled,
                     options)
                 (newBox, colW) = (b, b.width)
             } else if isArrowRow && c % 2 == 0 {
@@ -569,7 +687,7 @@ func layoutCD(_ body: [[ParseNode]], _ options: LayoutOptions) -> LayoutBox {
                     labelBelow,
                     vSpan,
                     colWidths[c],
-                    0.0,
+                    compactLabelsEnabled,
                     options)
                 (newBox, colW) = (b, b.width)
             } else {
@@ -580,9 +698,9 @@ func layoutCD(_ body: [[ParseNode]], _ options: LayoutOptions) -> LayoutBox {
         }
     }
 
-    // KaTeX `environments/cd.js` sets `addJot: true` for CD; `array.js` adds `\jot` (3pt) to each
-    // row's depth (same as `layoutArray` when `addJot` is set).
-    for r in 0..<rowDepths.count {
+    // KaTeX `environments/cd.js` sets `addJot: true` for CD; `array.js` adds `\jot` (3pt)
+    // between rows, never below the final row (same as `layoutArray`).
+    for r in 0..<max(rowDepths.count - 1, 0) {
         rowDepths[r] += jot
     }
 
@@ -590,7 +708,7 @@ func layoutCD(_ body: [[ParseNode]], _ options: LayoutOptions) -> LayoutBox {
     // KaTeX CD uses `pregap: 0.25, postgap: 0.25` per column (cd.ts line 216-217),
     // giving 0.5em between adjacent columns.  `hskipBeforeAndAfter` is unset (false),
     // so no outer padding.
-    let colGap = 0.5
+    let colGaps = [Double](repeating: 0.5, count: max(numCols - 1, 0))
 
     // Column alignment: objects are centered, arrows are centered
     let colAligns = [Character](repeating: "c", count: numCols)
@@ -598,13 +716,10 @@ func layoutCD(_ body: [[ParseNode]], _ options: LayoutOptions) -> LayoutBox {
     // No vertical separators for CD
     let colSeparators = [Bool?](repeating: nil, count: numCols + 1)
 
+    // Sum per-row extents (RaTeX `GridMetrics::dimensions` order).
     var totalHeight = 0.0
-    var rowPositions: [Double] = []
-    rowPositions.reserveCapacity(numRows)
     for (rowHeight, rowDepth) in zip(rowHeights, rowDepths) {
-        totalHeight += rowHeight
-        rowPositions.append(totalHeight)
-        totalHeight += rowDepth
+        totalHeight += rowHeight + rowDepth
     }
 
     let offset = totalHeight / 2.0 + metrics.axisHeight
@@ -613,7 +728,7 @@ func layoutCD(_ body: [[ParseNode]], _ options: LayoutOptions) -> LayoutBox {
 
     // Total width: sum of colWidths + colGap between each
     let totalWidth =
-        colWidths.reduce(0.0, +) + colGap * Double(numCols > 0 ? numCols - 1 : 0)
+        colWidths.reduce(0.0, +) + colGaps.reduce(0.0, +)
 
     // Build hlinesBeforeRow (all empty for CD)
     let hlinesBeforeRow = [[Bool]](repeating: [], count: numRows + 1)
@@ -627,7 +742,7 @@ func layoutCD(_ body: [[ParseNode]], _ options: LayoutOptions) -> LayoutBox {
                 colAligns: colAligns,
                 rowHeights: rowHeights,
                 rowDepths: rowDepths,
-                colGap: colGap,
+                colGaps: colGaps,
                 offset: offset,
                 contentXOffset: 0.0,
                 colSeparators: colSeparators,

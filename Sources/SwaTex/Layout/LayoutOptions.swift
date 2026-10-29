@@ -11,6 +11,11 @@ public struct LayoutOptions: Sendable {
     /// Extra horizontal kern between glyphs (em), e.g. for `\url` / `\href`
     /// to match browser tracking.
     public var interGlyphKernEm: Double
+    /// Explicit TeX sizing multiplier currently in force (`1.0` for `\normalsize`).
+    ///
+    /// Layout state propagated through `\tiny` ... `\Huge`; callers should
+    /// normally leave it at its default.
+    public var explicitSizeMultiplier: Double = 1.0
 
     /// Layout recursion depth, incremented per `layoutNode` level. Guards
     /// against stack overflow on pathologically nested input (mirrors the
@@ -56,6 +61,12 @@ public struct LayoutOptions: Sendable {
     public func with(color: Color) -> LayoutOptions {
         var copy = self
         copy.color = color
+        return copy
+    }
+
+    func with(explicitSizeMultiplier: Double) -> LayoutOptions {
+        var copy = self
+        copy.explicitSizeMultiplier = explicitSizeMultiplier
         return copy
     }
 

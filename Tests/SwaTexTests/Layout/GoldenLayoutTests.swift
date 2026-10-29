@@ -6,10 +6,12 @@ import Testing
 /// Golden layout parity tests.
 ///
 /// The fixtures under `Resources/golden/*.jsonl` are the RaTeX (Rust) engine's
-/// output over its golden corpora (regenerate with:
-/// `target/release/ratex-layout < tests/golden/<corpus>.txt`). Every formula's
-/// box metrics and display-list summary must match the Rust engine **exactly**
-/// (both engines round to 5 decimals).
+/// output (v0.1.15, `5f7dc48`) over its golden corpora. Regenerate with
+/// `scripts/regenerate_golden.py <ratex-checkout> <ratex-layout> <LayoutDump>`.
+/// Every formula's box metrics and display-list summary must match the Rust
+/// engine **exactly** (both engines round to 5 decimals), except lines tagged
+/// `"override"`: documented places where SwaTex follows KaTeX instead (the
+/// reasons live in the script's `KATEX_OVERRIDES`).
 @Suite("GoldenLayout")
 struct GoldenLayoutTests {
     struct Fixture: Decodable {

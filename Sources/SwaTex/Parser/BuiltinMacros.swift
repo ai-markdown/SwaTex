@@ -120,14 +120,11 @@ extension MacroExpander {
             "\\nobreak\\mskip2mu\\mathpunct{}\\mathchoice{\\mkern-3mu}{\\mkern-3mu}{}{}{:}\\mskip6mu\\relax"
         ),
 
-        // ── dots (string-based) ──
-        ("\\dots", "\\cdots"),
-        ("\\cdots", "\\@cdots"),
+        // ── dots (\dots, \dotso, \cdots are contextual function macros) ──
         ("\\dotsb", "\\cdots"),
         ("\\dotsm", "\\cdots"),
         ("\\dotsi", "\\!\\cdots"),
         ("\\dotsx", "\\ldots\\,"),
-        ("\\dotso", "\\ldots"),  // other
         ("\\DOTSI", "\\relax"),
         ("\\DOTSB", "\\relax"),
         ("\\DOTSX", "\\relax"),
@@ -200,10 +197,6 @@ extension MacroExpander {
         ("\u{2984}", "\\rBrace"),
         // Plimsoll.
         ("\u{29B5}", "\\minuso"),
-
-        // ── dddot / ddddot ──
-        ("\\dddot", "{\\overset{\\raisebox{-0.1ex}{\\normalsize ...}}{#1}}"),
-        ("\\ddddot", "{\\overset{\\raisebox{-0.1ex}{\\normalsize ....}}{#1}}"),
 
         // ── vdots ──
         ("\\vdots", "{\\varvdots\\rule{0pt}{15pt}}"),

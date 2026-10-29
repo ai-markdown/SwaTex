@@ -1,5 +1,5 @@
 // Array/matrix environment layout and \sizing.
-// Port of crates/ratex-layout/src/engine.rs (lines 2663–2952).
+// Port of crates/ratex-layout/src/engine.rs (`layout_array`, RaTeX 0.1.15).
 
 func layoutArray(
     _ body: [[ParseNode]], _ cols: [AlignSpec]?, _ arraystretch: Double,
@@ -14,27 +14,23 @@ func layoutArray(
     let arrayskip = arraystretch * baselineskip
     let arstrutH = 0.7 * arrayskip
     let arstrutD = 0.3 * arrayskip
-    // align/aligned/alignedat: use thin space (3mu) so "x" and "=" are closer,
-    // and cap relation spacing in cells to 3mu so spacing before/after "=" is equal.
-    let alignRelationMu = 3.0
-    let colGap: Double =
+    // Per-side column padding. KaTeX `array.ts`: each column contributes its
+    // `pregap`/`postgap` (from the column spec) or the default `\arraycolsep`;
+    // align/alignat environments default to zero and rely on the parser's
+    // explicit `pregap` (1em between aligned column pairs).
+    let defaultSideGap: Double =
         switch colSeparationType {
-        case "align":
-            muToEm(alignRelationMu, quad: metrics.quad)
-        case "alignat":
-            0.0
         case "small":
-            // smallmatrix: 2 × thickspace × (script_multiplier / current_multiplier)
+            // smallmatrix: thickspace × (script_multiplier / current_multiplier)
             // KaTeX: arraycolsep = 0.2778em × (scriptMultiplier / sizeMultiplier)
-            2.0 * muToEm(5.0, quad: metrics.quad) * MathStyle.script.sizeMultiplier
+            muToEm(5.0, quad: metrics.quad) * MathStyle.script.sizeMultiplier
                 / options.sizeMultiplier
+        case "align", "alignat":
+            0.0
         default:
-            2.0 * 5.0 * pt  // 2 × arraycolsep
+            5.0 * pt  // arraycolsep
         }
-    var cellOptions = options
-    if colSeparationType == "align" || colSeparationType == "alignat" {
-        cellOptions.alignRelationSpacing = alignRelationMu
-    }
+    let cellOptions = options
 
     let numRows = body.count
     if numRows == 0 {
@@ -44,15 +40,21 @@ func layoutArray(
     let numCols = body.map(\.count).max() ?? 0
 
     // Extract per-column alignment and column separators from cols spec.
+    let alignSpecs = (cols ?? []).filter { $0.alignType == .align }
     let colAligns: [Character] = {
-        let alignSpecs = (cols ?? []).filter { $0.alignType == .align }
-        return (0..<numCols).map { c in
+        (0..<numCols).map { c in
             guard c < alignSpecs.count, let a = alignSpecs[c].align, let first = a.first else {
                 return "c"
             }
             return first
         }
     }()
+    let sideGaps: [(pre: Double, post: Double)] = (0..<numCols).map { c in
+        let spec = c < alignSpecs.count ? alignSpecs[c] : nil
+        return (spec?.pregap ?? defaultSideGap, spec?.postgap ?? defaultSideGap)
+    }
+    let colGaps: [Double] =
+        numCols > 1 ? (0..<(numCols - 1)).map { sideGaps[$0].post + sideGaps[$0 + 1].pre } : []
 
     // Detect vertical separator positions in the column spec.
     // colSeparators[i]: nil = no rule, false = solid '|', true = dashed ':'.
@@ -86,7 +88,7 @@ func layoutArray(
     var rowDepths: [Double] = []
     rowDepths.reserveCapacity(numRows)
 
-    for row in body {
+    for (r, row) in body.enumerated() {
         var rowBoxes: [LayoutBox] = []
         rowBoxes.reserveCapacity(numCols)
         var rh = arstrutH
@@ -109,7 +111,8 @@ func layoutArray(
             rowBoxes.append(.empty)
         }
 
-        if addJot {
+        // KaTeX adds \jot between rows, never below the final row.
+        if addJot && r + 1 < numRows {
             rd += jot
         }
 
@@ -156,20 +159,19 @@ func layoutArray(
     // Total height and offset (computed after extra hline spacing is applied).
     var totalHeight = 0.0
     for (rowHeight, rowDepth) in zip(rowHeights, rowDepths) {
-        totalHeight += rowHeight
-        totalHeight += rowDepth
+        // Sum per-row extents (RaTeX `GridMetrics::dimensions` order).
+        totalHeight += rowHeight + rowDepth
     }
 
     let offset = totalHeight / 2.0 + metrics.axisHeight
 
     // Extra x padding before col 0 and after last col (hskipBeforeAndAfter).
-    let contentXOffset = hskipBeforeAndAfter ? colGap / 2.0 : 0.0
+    let contentXOffset = hskipBeforeAndAfter ? (sideGaps.first?.pre ?? 0) : 0.0
+    let contentXEndOffset = hskipBeforeAndAfter ? (sideGaps.last?.post ?? 0) : 0.0
 
     // Width of the cell grid including horizontal padding (no tag column).
     let arrayInnerWidth =
-        colWidths.reduce(0, +)
-        + colGap * Double(numCols > 0 ? numCols - 1 : 0)
-        + 2.0 * contentXOffset
+        colWidths.reduce(0, +) + colGaps.reduce(0, +) + contentXOffset + contentXEndOffset
 
     var rowTagBoxes = [LayoutBox?](repeating: nil, count: numRows)
     var tagColWidth = 0.0
@@ -183,7 +185,9 @@ func layoutArray(
             }
         }
     }
-    let tagGapEm = tagColWidth > 0 ? textOpts.metrics.quad : 0.0
+    // Compact automatic equation numbers need the extra 0.1em reserved by
+    // KaTeX's block tag column; wide explicit tags retain the standard 1em.
+    let tagGapEm = tagColWidth > 0 ? (tagColWidth > 2.0 ? 1.0 : 1.1) * textOpts.metrics.quad : 0.0
     // leqno (tags on the left) is parsed but not yet laid out; keep tags on the right.
     let tagsLeft = false
     _ = leqno
@@ -204,9 +208,10 @@ func layoutArray(
                 colAligns: colAligns,
                 rowHeights: rowHeights,
                 rowDepths: rowDepths,
-                colGap: colGap,
+                colGaps: colGaps,
                 offset: offset,
                 contentXOffset: contentXOffset,
+                contentXEndOffset: contentXEndOffset,
                 colSeparators: colSeparators,
                 hlinesBeforeRow: hlinesPadded,
                 ruleThickness: ruleThickness,
@@ -242,9 +247,13 @@ func layoutSizing(_ size: UInt8, _ body: [ParseNode], _ options: LayoutOptions) 
         }
 
     // KaTeX `Options.havingSize`: inner is built in `this.style.text()` (≥ textstyle).
+    // Keep the requested size as absolute layout state so nested sizing resets
+    // replace, rather than compound with, the surrounding explicit size.
+    let currentMultiplier = options.sizeMultiplier * options.explicitSizeMultiplier
     let innerOpts = options.with(style: options.style.textEquivalent)
+        .with(explicitSizeMultiplier: multiplier)
     let inner = layoutExpression(body, innerOpts, isRealGroup: true)
-    let ratio = multiplier / options.sizeMultiplier
+    let ratio = multiplier / currentMultiplier
     if abs(ratio - 1.0) < 0.001 {
         return inner
     }

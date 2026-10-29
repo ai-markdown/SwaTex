@@ -31,7 +31,7 @@ func layoutEnclose(
     let hasBorder = label == "\\fbox" || label == "\\fcolorbox"
 
     let bg = backgroundColor.flatMap { Color(name: $0) ?? Color(hex: $0) }
-    let border = borderColor.flatMap { Color(name: $0) ?? Color(hex: $0) } ?? .black
+    let border = borderColor.flatMap { Color(name: $0) ?? Color(hex: $0) } ?? options.color
 
     let inner = layoutNode(body, options)
     let outerPad = padding + (hasBorder ? borderThickness : 0.0)
@@ -262,7 +262,6 @@ func layoutHorizBrace(
     _ base: ParseNode, _ isOver: Bool, _ label: String, _ options: LayoutOptions
 ) -> LayoutBox {
     let bodyBox = layoutNode(base, options)
-    let w = max(bodyBox.width, 0.5)
 
     let isBracket = label.drop(while: { $0 == "\\" }).hasSuffix("bracket")
 
@@ -273,6 +272,7 @@ func layoutHorizBrace(
         } else {
             isOver ? "overbrace" : "underbrace"
         }
+    let w = max(bodyBox.width, katexStretchyMinWidthEm(stretchKey) ?? 0.5)
 
     let (rawCommands, braceH, braceFill): ([PathCommand], Double, Bool)
     if let (c, h) = katexStretchyPath(stretchKey, widthEm: w) {
@@ -302,34 +302,9 @@ func layoutHorizBrace(
         content: .svgPath(commands: commands, fill: braceFill),
         color: options.color)
 
-    let gap = 0.1
-    let (height, depth) =
-        if isOver {
-            (bodyBox.height + braceH + gap, bodyBox.depth)
-        } else {
-            (bodyBox.height, bodyBox.depth + braceH + gap)
-        }
-
-    let clearance =
-        if isOver {
-            height - braceH
-        } else {
-            bodyBox.height + bodyBox.depth + gap
-        }
-    let totalW = bodyBox.width
-
-    return LayoutBox(
-        width: totalW,
-        height: height,
-        depth: depth,
-        content: .accent(
-            base: bodyBox,
-            accent: braceBox,
-            clearance: clearance,
-            skew: 0.0,
-            isBelow: !isOver,
-            underGapEm: 0.0),
-        color: options.color)
+    return composeStretchy(
+        paddedToWidth(bodyBox, w), braceBox, .horizontalBrace(isOver: isOver, options),
+        skew: 0, color: options.color)
 }
 
 // ============================================================================

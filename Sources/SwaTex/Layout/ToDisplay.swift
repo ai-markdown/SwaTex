@@ -30,8 +30,7 @@ public func toDisplayList(_ root: LayoutBox) -> DisplayList {
     // Compute visual bounding box from actual display items.
     // This handles cases like \smash (zero height/depth) and \mathllap (zero width)
     // where content extends beyond the nominal box dimensions.
-    // Horizontal: near-zero nominal width gets full expansion; otherwise we still shift when
-    // `min_x < 0` so \mathclap under large operators does not paint off the left edge.
+    // Horizontal: expand only genuinely zero-width roots (see below).
     let (minX, maxX, minY, maxY) = computeVisualBounds(items)
 
     var width = root.width
@@ -55,10 +54,11 @@ public func toDisplayList(_ root: LayoutBox) -> DisplayList {
         }
     }
 
-    // Expand horizontal dimensions when nominal width is near-zero (e.g. pure \mathllap), or when
-    // ink extends left of x=0. The latter happens for `\sum_{\mathclap{…}}`: the subscript box has
-    // zero advance but negative kerns center the ink, so the first glyph can sit at negative x.
-    // Rasterizers (PNG) clip there; shift right so all items stay in [0, width].
+    // Expand horizontal dimensions only when the root itself has near-zero nominal
+    // width (e.g. a standalone \mathllap). For a non-zero root, keep negative
+    // child coordinates: nested overflow (`\mathclap` limits, accents wider than
+    // their base) stays outside the advance box, exactly like KaTeX's measured
+    // element box.
     if root.width < 0.01 {
         if minX < -0.001 {
             let extra = -minX
@@ -70,12 +70,6 @@ public func toDisplayList(_ root: LayoutBox) -> DisplayList {
         let shiftedMaxX = minX < -0.001 ? maxX - minX : maxX
         if shiftedMaxX > width + 0.001 {
             width = shiftedMaxX
-        }
-    } else if minX < -0.001 {
-        let extra = -minX
-        width = max(root.width + extra, maxX + extra)
-        for i in items.indices {
-            items[i] = shiftItemX(items[i], dx: extra)
         }
     }
 
@@ -366,109 +360,11 @@ private func emitBox(
             truncated: &truncated)
 
     case .array(let a):
-        let yTop = y - a.offset * scale
-        let arrayTotalHeight = (lbox.height + lbox.depth) * scale
-        let lineThickness = a.ruleThickness * scale
-
-        // Compute y positions of row boundaries (0 = top of array, num_rows = bottom).
-        var boundaryYs: [Double] = []
-        boundaryYs.reserveCapacity(a.cells.count + 1)
-        var curBoundary = yTop
-        boundaryYs.append(curBoundary)
-        for (rowHeight, rowDepth) in zip(a.rowHeights, a.rowDepths) {
-            curBoundary += (rowHeight + rowDepth) * scale
-            boundaryYs.append(curBoundary)
-        }
-
-        // Draw horizontal lines (hlines) before/after each row.
-        // Each entry in hlines vec is one \hline (false) or \hdashline (true).
-        // Consecutive rules are separated by double_rule_sep (= \doublerulesep = 2pt).
-        //
-        // Extra space for n > 1 hlines was already added to the layout:
-        //   - r == 0: added to row_heights[0], so lines start at boundary_ys[0] going down.
-        //   - r >= 1: added to row_depths[r-1], so lines occupy the range
-        //             [boundary_ys[r] - (n-1)*rule_step, boundary_ys[r]], above row r.
-        let ruleStep = lineThickness + a.doubleRuleSep * scale
-        for (r, hlines) in a.hlinesBeforeRow.enumerated() {
-            if r < boundaryYs.count {
-                let n = hlines.count
-                let startY =
-                    r == 0
-                    ? boundaryYs[0]
-                    : boundaryYs[r] - Double(max(n - 1, 0)) * ruleStep
-                for (i, isDashed) in hlines.enumerated() {
-                    items.append(
-                        .line(
-                            x: x, y: startY + Double(i) * ruleStep,
-                            width: a.arrayInnerWidth * scale, thickness: lineThickness,
-                            color: lbox.color, dashed: isDashed))
-                }
-            }
-        }
-
-        // Draw vertical column separator lines ('|' = solid, ':' = dashed).
-        // Separator at position i has local x = content_x_offset - col_gap/2 + sum(col_widths[..i]) + col_gap * i.
-        let colGapHalf = a.colGap / 2.0
-        for (i, sep) in a.colSeparators.enumerated() {
-            if let isDashed = sep {
-                let prefixW = a.colWidths[..<i].reduce(0.0, +)
-                let localX = a.contentXOffset - colGapHalf + prefixW + a.colGap * Double(i)
-                let absX = x + localX * scale - lineThickness / 2.0
-                if isDashed {
-                    // Dashed vertical line: draw segments (dash=4t, gap=4t) top to bottom.
-                    let t = lineThickness
-                    let dash = 4.0 * t
-                    let period = 2.0 * dash
-                    var curY = yTop
-                    while curY < yTop + arrayTotalHeight {
-                        let segH = min(dash, yTop + arrayTotalHeight - curY)
-                        items.append(
-                            .rect(x: absX, y: curY, width: t, height: segH, color: lbox.color))
-                        curY += period
-                    }
-                } else {
-                    items.append(
-                        .rect(
-                            x: absX, y: yTop, width: lineThickness,
-                            height: arrayTotalHeight, color: lbox.color))
-                }
-            }
-        }
-
-        // Render cells.
-        var curY = yTop
-        for (r, row) in a.cells.enumerated() {
-            let rh = a.rowHeights[r]
-            curY += rh * scale
-            var curX = x + a.contentXOffset * scale
-            for (c, cell) in row.enumerated() {
-                let cw = a.colWidths[c]
-                let align: Character = c < a.colAligns.count ? a.colAligns[c] : "c"
-                let cellX: Double
-                switch align {
-                case "l": cellX = curX
-                case "r": cellX = curX + (cw - cell.width) * scale
-                default: cellX = curX + (cw - cell.width) * scale / 2.0
-                }
-                emitBox(
-                    cell, x: cellX, y: curY, scale: scale, items: &items, floor: floor,
-                    depth: depth + 1, truncated: &truncated)
-                curX += cw * scale
-                if c + 1 < row.count {
-                    curX += a.colGap * scale
-                }
-            }
-            if a.tagColWidth > 0.0 {
-                if r < a.rowTags.count, let tb = a.rowTags[r] {
-                    let tagStartEm = a.arrayInnerWidth - a.contentXOffset + a.tagGapEm
-                    let tagX = x + tagStartEm * scale + (a.tagColWidth - tb.width) * scale
-                    emitBox(
-                        tb, x: tagX, y: curY, scale: scale, items: &items, floor: floor,
-                        depth: depth + 1, truncated: &truncated)
-                }
-            }
-            curY += a.rowDepths[r] * scale
-        }
+        // Outlined so its many locals do not enlarge every recursive emitBox
+        // frame (unoptimized builds reserve stack for all switch cases).
+        emitArray(
+            a, lbox, x: x, y: y, scale: scale, items: &items, floor: floor, depth: depth,
+            truncated: &truncated)
 
     case .svgPath(let commands, let fill):
         let scaled = commands.scaled(by: scale)
@@ -528,12 +424,11 @@ private func emitBox(
             body, x: x, y: y, scale: scale, items: &items, floor: floor, depth: depth + 1,
             truncated: &truncated)
 
-    case .overline(let body, let ruleThickness):
+    case .overline(let body, let ruleThickness, let offset):
         emitBox(
             body, x: x, y: y, scale: scale, items: &items, floor: floor, depth: depth + 1,
             truncated: &truncated)
-        // Rule center is at 2.5 * rule_thickness above the body's top
-        let ruleCenterY = y - (body.height + 2.5 * ruleThickness) * scale
+        let ruleCenterY = y - (body.height + offset) * scale
         items.append(
             .line(
                 x: x, y: ruleCenterY, width: lbox.width * scale,
@@ -571,6 +466,124 @@ private func emitBox(
         // A layout-stage guard already dropped this subtree; surface it
         // through the same signal as emission-stage drops.
         truncated = true
+    }
+}
+
+/// Emit a matrix/array box (see `emitBox`).
+@inline(never)
+private func emitArray(
+    _ a: ArrayLayout, _ lbox: LayoutBox, x: Double, y: Double, scale: Double,
+    items: inout [DisplayItem], floor: UInt, depth: Int, truncated: inout Bool
+) {
+    let yTop = y - a.offset * scale
+    let arrayTotalHeight = (lbox.height + lbox.depth) * scale
+    let lineThickness = a.ruleThickness * scale
+
+    // Compute y positions of row boundaries (0 = top of array, num_rows = bottom).
+    var boundaryYs: [Double] = []
+    boundaryYs.reserveCapacity(a.cells.count + 1)
+    var curBoundary = yTop
+    boundaryYs.append(curBoundary)
+    for (rowHeight, rowDepth) in zip(a.rowHeights, a.rowDepths) {
+        curBoundary += (rowHeight + rowDepth) * scale
+        boundaryYs.append(curBoundary)
+    }
+
+    // Draw horizontal lines (hlines) before/after each row.
+    // Each entry in hlines vec is one \hline (false) or \hdashline (true).
+    // Consecutive rules are separated by double_rule_sep (= \doublerulesep = 2pt).
+    //
+    // Extra space for n > 1 hlines was already added to the layout:
+    //   - r == 0: added to row_heights[0], so lines start at boundary_ys[0] going down.
+    //   - r >= 1: added to row_depths[r-1], so lines occupy the range
+    //             [boundary_ys[r] - (n-1)*rule_step, boundary_ys[r]], above row r.
+    let ruleStep = lineThickness + a.doubleRuleSep * scale
+    for (r, hlines) in a.hlinesBeforeRow.enumerated() {
+        if r < boundaryYs.count {
+            let n = hlines.count
+            let startY =
+                r == 0
+                ? boundaryYs[0]
+                : boundaryYs[r] - Double(max(n - 1, 0)) * ruleStep
+            for (i, isDashed) in hlines.enumerated() {
+                items.append(
+                    .line(
+                        x: x, y: startY + Double(i) * ruleStep,
+                        width: a.arrayInnerWidth * scale, thickness: lineThickness,
+                        color: lbox.color, dashed: isDashed))
+            }
+        }
+    }
+
+    // Draw vertical column separator lines ('|' = solid, ':' = dashed).
+    // Put a separator at the midpoint of its column boundary gap.
+    for (i, sep) in a.colSeparators.enumerated() {
+        if let isDashed = sep {
+            let prefixW = a.colWidths[..<i].reduce(0.0, +)
+            let localX: Double
+            if i == 0 {
+                localX = 0
+            } else if i >= a.colWidths.count {
+                localX = a.arrayInnerWidth
+            } else {
+                let precedingGaps = a.colGaps[..<(i - 1)].reduce(0.0, +)
+                localX = a.contentXOffset + prefixW + precedingGaps + a.colGaps[i - 1] / 2.0
+            }
+            let absX = x + localX * scale - lineThickness / 2.0
+            if isDashed {
+                // Dashed vertical line: draw segments (dash=4t, gap=4t) top to bottom.
+                let t = lineThickness
+                let dash = 4.0 * t
+                let period = 2.0 * dash
+                var curY = yTop
+                while curY < yTop + arrayTotalHeight {
+                    let segH = min(dash, yTop + arrayTotalHeight - curY)
+                    items.append(
+                        .rect(x: absX, y: curY, width: t, height: segH, color: lbox.color))
+                    curY += period
+                }
+            } else {
+                items.append(
+                    .rect(
+                        x: absX, y: yTop, width: lineThickness,
+                        height: arrayTotalHeight, color: lbox.color))
+            }
+        }
+    }
+
+    // Render cells.
+    var curY = yTop
+    for (r, row) in a.cells.enumerated() {
+        let rh = a.rowHeights[r]
+        curY += rh * scale
+        var curX = x + a.contentXOffset * scale
+        for (c, cell) in row.enumerated() {
+            let cw = a.colWidths[c]
+            let align: Character = c < a.colAligns.count ? a.colAligns[c] : "c"
+            let cellX: Double
+            switch align {
+            case "l": cellX = curX
+            case "r": cellX = curX + (cw - cell.width) * scale
+            default: cellX = curX + (cw - cell.width) * scale / 2.0
+            }
+            emitBox(
+                cell, x: cellX, y: curY, scale: scale, items: &items, floor: floor,
+                depth: depth + 1, truncated: &truncated)
+            curX += cw * scale
+            if c + 1 < row.count {
+                curX += (c < a.colGaps.count ? a.colGaps[c] : 0) * scale
+            }
+        }
+        if a.tagColWidth > 0.0 {
+            if r < a.rowTags.count, let tb = a.rowTags[r] {
+                let tagStartEm = a.arrayInnerWidth + a.tagGapEm
+                let tagX = x + tagStartEm * scale + (a.tagColWidth - tb.width) * scale
+                emitBox(
+                    tb, x: tagX, y: curY, scale: scale, items: &items, floor: floor,
+                    depth: depth + 1, truncated: &truncated)
+            }
+        }
+        curY += a.rowDepths[r] * scale
     }
 }
 

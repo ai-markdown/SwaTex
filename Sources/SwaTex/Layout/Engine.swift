@@ -348,7 +348,7 @@ private func layoutNodeDispatch(_ node: ParseNode, _ options: LayoutOptions) -> 
         // A `.cdArrow` inside `\begin{CD}` is laid out by `layoutCD` with
         // real cell dimensions; this standalone case (covered by
         // DirectUnitTests) uses zero labels/dimensions.
-        return layoutCDArrow(direction, labelAbove, labelBelow, 0, 0, 0, options)
+        return layoutCDArrow(direction, labelAbove, labelBelow, 0, 0, true, options)
 
     case let .proofTree(tree):
         return layoutProofTree(tree, options)

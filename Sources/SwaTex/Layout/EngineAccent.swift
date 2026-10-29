@@ -1,21 +1,37 @@
 // Accent layout.
-// Port of crates/ratex-layout/src/engine.rs (lines 1680–2014).
+// Port of crates/ratex-layout/src/engine.rs (`layout_accent`, RaTeX 0.1.15).
 
 /// `\vec` KaTeX SVG: nudge slightly right to match KaTeX reference.
 private let vecSkewExtraRightEm = 0.018
 
-/// Extract the italic correction of the base glyph.
-/// Used by superscripts: KaTeX adds margin-right = italic correction to italic math
-/// characters, so the superscript starts at advanceWidth + italicCorrection (not just
-/// advanceWidth).
-func glyphItalic(_ lb: LayoutBox) -> Double {
+/// Extract the italic correction only when this box itself is a glyph.
+///
+/// This distinction mirrors KaTeX's `base instanceof SymbolNode` check. Recursing through an
+/// `hbox` would incorrectly treat text/group spans as symbols and pull their subscripts left.
+func directGlyphItalic(_ lb: LayoutBox) -> Double? {
+    if case let .glyph(fontId, charCode) = lb.content {
+        return fontId.metrics(forChar: charCode)?.italic
+    }
+    return nil
+}
+
+/// Find the first glyph inside a box.
+///
+/// KaTeX special-cases `\oiint` and `\oiiint`: their overlay makes the base a span rather than
+/// a `SymbolNode`, but the underlying integral glyph's italic correction still applies.
+func firstGlyphItalic(_ lb: LayoutBox) -> Double? {
     switch lb.content {
-    case let .glyph(fontId, charCode):
-        fontId.metrics(forChar: charCode)?.italic ?? 0
+    case .glyph:
+        return directGlyphItalic(lb)
     case let .hbox(children):
-        children.last.map(glyphItalic) ?? 0
+        for child in children {
+            if let italic = firstGlyphItalic(child) {
+                return italic
+            }
+        }
+        return nil
     default:
-        0
+        return nil
     }
 }
 
@@ -41,6 +57,124 @@ func glyphSkew(_ lb: LayoutBox) -> Double {
     }
 }
 
+/// Vertical placement of a stretchy accent, brace, or arrow relative to its base.
+enum StretchyPlacement {
+    case above
+    case below
+}
+
+/// Shared clearance model for stretchy paths (`\widehat`, `\overrightarrow`,
+/// `\overbrace`, …).
+struct StretchySpec {
+    var placement: StretchyPlacement
+    var gap: Double
+
+    static func accent(_ label: String, isBelow: Bool, _ options: LayoutOptions) -> StretchySpec {
+        // KaTeX accentunder.ts assigns only \utilde a 0.12em kern.
+        StretchySpec(
+            placement: isBelow ? .below : .above,
+            gap: label == "\\utilde" ? 3.0 * options.metrics.defaultRuleThickness : 0.0)
+    }
+
+    static func horizontalBrace(isOver: Bool, _ options: LayoutOptions) -> StretchySpec {
+        // KaTeX's 0.1em brace kern is 2.5 default rule units.
+        StretchySpec(
+            placement: isOver ? .above : .below,
+            gap: 2.5 * options.metrics.defaultRuleThickness)
+    }
+}
+
+/// Center `body` in `width` when the stretchy mark is wider than its base
+/// (KaTeX stretchy `minWidth`).
+func paddedToWidth(_ body: LayoutBox, _ width: Double) -> LayoutBox {
+    if width <= body.width + Double.ulpOfOne {
+        return body
+    }
+    let pad = (width - body.width) / 2.0
+    return makeHBox([.kern(pad), body, .kern(pad)])
+}
+
+/// Place a top-origin stretchy path (height 0, depth = path height) above or
+/// below its base.
+func composeStretchy(
+    _ base: LayoutBox, _ accent: LayoutBox, _ spec: StretchySpec, skew: Double, color: Color
+) -> LayoutBox {
+    let isBelow = spec.placement == .below
+    let clearance = isBelow ? base.height + base.depth + spec.gap : base.height + spec.gap
+    let (height, depth) =
+        isBelow
+        ? (base.height, base.depth + spec.gap + accent.depth)
+        : (base.height + spec.gap + accent.depth, base.depth)
+    return LayoutBox(
+        width: base.width, height: height, depth: depth,
+        content: .accent(
+            base: base, accent: accent, clearance: clearance, skew: skew,
+            isBelow: isBelow, underGapEm: isBelow ? spec.gap : 0),
+        color: color)
+}
+
+/// Dedicated geometry for AMSMath's triple/quadruple dot accents.
+///
+/// KaTeX exposes these commands through an `\overset` macro whose payload is a
+/// run of text periods. Build the dot disks directly instead: their advance and
+/// clearance are stable math geometry and do not inherit text-run behavior.
+func layoutMultidotAccent(_ body: LayoutBox, _ dotCount: Int, _ options: LayoutOptions)
+    -> LayoutBox
+{
+    // The KaTeX macro wraps its dot payload in \normalsize. Math style and
+    // explicit \tiny...\Huge sizing both scale this entire box later, so
+    // compensate for both to keep only the mark at normal text size.
+    let normalSizeScale = 1.0 / (options.sizeMultiplier * options.explicitSizeMultiplier)
+    let advance =
+        (FontId.mainRegular.metrics(forChar: UInt32(UInt8(ascii: ".")))?.width ?? 0.27778)
+        * normalSizeScale
+    let radius = 0.07 * normalSizeScale
+    let markWidth = advance * Double(dotCount)
+    let markHeight = radius * 2.0
+    let bezier = 0.5522847498
+    var commands: [PathCommand] = []
+    commands.reserveCapacity(dotCount * 6)
+    for index in 0..<dotCount {
+        let cx = advance * (Double(index) + 0.5)
+        let cy = -radius
+        commands.append(.moveTo(x: cx + radius, y: cy))
+        commands.append(
+            .cubicTo(
+                x1: cx + radius, y1: cy - bezier * radius,
+                x2: cx + bezier * radius, y2: cy - radius,
+                x: cx, y: cy - radius))
+        commands.append(
+            .cubicTo(
+                x1: cx - bezier * radius, y1: cy - radius,
+                x2: cx - radius, y2: cy - bezier * radius,
+                x: cx - radius, y: cy))
+        commands.append(
+            .cubicTo(
+                x1: cx - radius, y1: cy + bezier * radius,
+                x2: cx - bezier * radius, y2: cy + radius,
+                x: cx, y: cy + radius))
+        commands.append(
+            .cubicTo(
+                x1: cx + bezier * radius, y1: cy + radius,
+                x2: cx + radius, y2: cy + bezier * radius,
+                x: cx + radius, y: cy))
+        commands.append(.close)
+    }
+
+    let paddedBody = paddedToWidth(body, markWidth)
+    let mark = LayoutBox(
+        width: markWidth, height: markHeight, depth: 0,
+        content: .svgPath(commands: commands, fill: true),
+        color: options.color)
+    let clearance = paddedBody.height + 3.0 * options.metrics.defaultRuleThickness
+    return LayoutBox(
+        width: paddedBody.width, height: clearance + markHeight, depth: paddedBody.depth,
+        content: .accent(
+            base: paddedBody, accent: mark, clearance: clearance, skew: 0,
+            isBelow: false, underGapEm: 0),
+        color: options.color)
+}
+
 func layoutAccent(
     _ label: String, _ base: ParseNode, _ isStretchy: Bool, _ isShifty: Bool,
     _ isBelow: Bool, _ options: LayoutOptions
@@ -53,10 +187,16 @@ func layoutAccent(
         return layoutTextcircled(bodyBox, options)
     }
 
+    if label == "\\dddot" || label == "\\ddddot" {
+        return layoutMultidotAccent(bodyBox, label == "\\dddot" ? 3 : 4, options)
+    }
+
     // Try KaTeX exact SVG paths first (widehat, widetilde, overgroup, etc.).
     // The path width must stay inside the accent box; renderers size their canvas from
     // DisplayList.width, so drawing wider than the box clips in an enclosing HBox.
-    let accentTargetW = baseW
+    // KaTeX stretchy marks never shrink below their `minWidth`; the base is centered
+    // in the wider mark instead.
+    let accentTargetW = max(baseW, katexStretchyMinWidthEm(label) ?? 0)
     if let (commands, w, h, fill) = katexAccentPath(
         label, baseWidthEm: accentTargetW, groupLen: accentOrdgroupLen(base))
     {
@@ -65,42 +205,20 @@ func layoutAccent(
             width: w, height: 0, depth: h,
             content: .svgPath(commands: commands, fill: fill),
             color: options.color)
-        // KaTeX `accent.ts` uses `clearance = min(body.height, xHeight)` for ordinary
-        // accents. That matches fixed-size `\vec` (svgData.vec); using it for *width-scaled*
-        // SVG accents (\widehat, \widetilde, \overgroup, …) pulls the path down onto the
-        // base (golden 0604/0885/0886). Slightly tighter than 0.08em — aligns wide SVG hats
-        // with KaTeX PNG crops (e.g. 0935).
-        let gap = 0.065
-        let underGapEm = isBelow && label == "\\utilde" ? 0.12 : 0.0
-        let clearance: Double =
-            if isBelow {
-                bodyBox.height + bodyBox.depth + gap
-            } else if label == "\\vec" {
-                // KaTeX: clearance = min(body.height, xHeight) is used as *overlap*
-                // (kern down). Equivalent position:
-                // vec bottom = body.height - overlap = max(0, body.height - xHeight).
-                max(bodyBox.height - options.metrics.xHeight, 0)
-            } else {
-                bodyBox.height + gap
-            }
-        let (height, depth): (Double, Double) =
-            if isBelow {
-                (bodyBox.height, bodyBox.depth + h + gap + underGapEm)
-            } else if label == "\\vec" {
-                // Box height = clearance + H_EM, matching KaTeX VList height.
-                (clearance + h, bodyBox.depth)
-            } else {
-                (bodyBox.height + gap + h, bodyBox.depth)
-            }
-        let vecSkew =
-            label == "\\vec"
-            ? (isShifty ? glyphSkew(bodyBox) : 0) + vecSkewExtraRightEm
-            : 0.0
+        if label != "\\vec" {
+            return composeStretchy(
+                paddedToWidth(bodyBox, w), accentBox,
+                .accent(label, isBelow: isBelow, options), skew: 0, color: options.color)
+        }
+        // KaTeX `accent.ts`: clearance = min(body.height, xHeight) is used as *overlap*
+        // (kern down). Equivalent position: vec bottom = body.height - overlap.
+        let clearance = max(bodyBox.height - options.metrics.xHeight, 0)
+        let vecSkew = (isShifty ? glyphSkew(bodyBox) : 0) + vecSkewExtraRightEm
         return LayoutBox(
-            width: bodyBox.width, height: height, depth: depth,
+            width: bodyBox.width, height: clearance + h, depth: bodyBox.depth,
             content: .accent(
                 base: bodyBox, accent: accentBox, clearance: clearance,
-                skew: vecSkew, isBelow: isBelow, underGapEm: underGapEm),
+                skew: vecSkew, isBelow: isBelow, underGapEm: 0),
             color: options.color)
     }
 
@@ -110,7 +228,7 @@ func layoutAccent(
     let accentBox: LayoutBox
     if useArrowPath {
         let (commands, arrowH, fillArrow): ([PathCommand], Double, Bool)
-        if let (c, h) = katexStretchyPath(label, widthEm: baseW) {
+        if let (c, h) = katexStretchyPath(label, widthEm: accentTargetW) {
             (commands, arrowH, fillArrow) = (c, h, true)
         } else {
             // INTENTIONALLY UNCOVERED (defensive-fallback KEEP): reachable
@@ -120,13 +238,14 @@ func layoutAccent(
             // resolve in `pathForName` — so the lookup never misses. Kept as
             // the correct behavior if the generated table loses an entry.
             let h = 0.3
-            let c = stretchyAccentPath(label, baseW, h)
+            let c = stretchyAccentPath(label, accentTargetW, h)
             let fill = label == "\\xtwoheadrightarrow" || label == "\\xtwoheadleftarrow"
             (commands, arrowH, fillArrow) = (c, h, fill)
         }
+        // Top-origin path (height 0, depth = arrow height), like the other stretchy marks.
         accentBox = LayoutBox(
-            width: baseW, height: arrowH / 2, depth: arrowH / 2,
-            content: .svgPath(commands: commands, fill: fillArrow),
+            width: accentTargetW, height: 0, depth: arrowH,
+            content: .svgPath(commands: commands.shiftedY(arrowH / 2), fill: fillArrow),
             color: options.color)
     } else {
         // Try text mode first for text accents (\c, \', \`, etc.), fall back to math
@@ -149,32 +268,19 @@ func layoutAccent(
             color: options.color)
     }
 
-    let skew: Double =
-        if useArrowPath {
-            0
-        } else if isShifty {
-            // For shifty accents (\hat, \tilde, etc.) shift by the BASE character's skew,
-            // which encodes the italic correction in math-italic fonts (e.g. M → 0.083em).
-            glyphSkew(bodyBox)
-        } else {
-            0
-        }
+    if useArrowPath {
+        return composeStretchy(
+            paddedToWidth(bodyBox, accentBox.width), accentBox,
+            .accent(label, isBelow: isBelow, options), skew: 0, color: options.color)
+    }
 
-    // gap = clearance between body top and bottom of accent SVG.
-    // For arrow accents, the SVG path is centered (height=h/2, depth=h/2).
-    // The gap prevents the visible arrowhead / harpoon tip from overlapping the base top.
-    //
-    // KaTeX stretchy arrows with vb_height 522 have h/2 ≈ 0.261em; default gap=0.12 left
-    // too little room for tall caps (`\overleftrightarrow{AB}`, `\overleftarrow{AB}`,
-    // `\overleftharpoon{AB}`, …).  `\Overrightarrow` uses a taller glyph (vb 560) and keeps
-    // the slightly smaller kern used in prior tuning.
-    let gap: Double = useArrowPath ? (label == "\\Overrightarrow" ? 0.21 : 0.26) : 0.0
+    // For shifty accents (\hat, \tilde, etc.) shift by the BASE character's skew,
+    // which encodes the italic correction in math-italic fonts (e.g. M → 0.083em).
+    let skew = isShifty ? glyphSkew(bodyBox) : 0
 
     let clearance: Double
     if isBelow {
-        clearance = bodyBox.height + bodyBox.depth + accentBox.depth + gap
-    } else if useArrowPath {
-        clearance = bodyBox.height + gap
+        clearance = bodyBox.height + bodyBox.depth + accentBox.depth
     } else {
         // Clearance = how high above baseline the accent is positioned.
         // - For simple letters (M, b, o): bodyBox.height is the letter top → use directly.
@@ -253,10 +359,7 @@ func layoutAccent(
     let (height, depth): (Double, Double)
     if isBelow {
         height = bodyBox.height
-        depth = bodyBox.depth + accentBox.height + accentBox.depth + gap
-    } else if useArrowPath {
-        height = bodyBox.height + gap + accentBox.height
-        depth = bodyBox.depth
+        depth = bodyBox.depth + accentBox.height + accentBox.depth
     } else {
         // ToDisplay shifts every glyph accent DOWN by max(0, accent.height - 0.35),
         // so the actual visual top of the accent mark = clearance + min(0.35, accent.height).

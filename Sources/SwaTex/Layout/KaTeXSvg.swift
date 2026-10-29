@@ -779,11 +779,11 @@ private func katexImageData(_ label: String) -> KatexImageData? {
     // Overbrace/underbrace: KaTeX Size4 glyphs (viewBox 400000×548), same 3-piece horizontal joining as stretchy arrows.
     case "overbrace":
         return KatexImageData(
-            paths: ["leftbrace", "midbrace", "rightbrace"], minWidth: 0.888, vbHeight: 548.0,
+            paths: ["leftbrace", "midbrace", "rightbrace"], minWidth: 1.6, vbHeight: 548.0,
             align: nil)
     case "underbrace":
         return KatexImageData(
-            paths: ["leftbraceunder", "midbraceunder", "rightbraceunder"], minWidth: 0.888,
+            paths: ["leftbraceunder", "midbraceunder", "rightbraceunder"], minWidth: 1.6,
             vbHeight: 548.0, align: nil)
     // mathtools `\overbracket` / `\underbracket`: 2-piece KaTeX SVG (same minWidth/height as KaTeX `stretchy.ts`).
     case "overbracket":

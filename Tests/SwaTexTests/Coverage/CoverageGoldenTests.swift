@@ -15,12 +15,14 @@ import Testing
 /// (both engines round to 5 decimals). Entries with `"error": true` were
 /// rejected by the Rust engine and must be rejected by SwaTex too.
 ///
-/// EXCEPTIONS — do NOT blindly regenerate from RaTeX: five entries were
-/// hand-edited to KaTeX-correct values where RaTeX shares the original bug
-/// (unterminated `\verb`, `x\limits^2` — now errors; `\vcenter` depths —
-/// now axis-centered ink). They are pinned by LayoutFixRegressionTests /
-/// ParserSpecTests / HardeningTests; regeneration must preserve them (see
-/// README "Known limitations").
+/// Reference: RaTeX v0.1.15 (`5f7dc48`). Regenerate with
+/// `scripts/regenerate_golden.py`, which keeps this file's inputs.
+///
+/// EXCEPTIONS — lines tagged `"override"` hold SwaTex's KaTeX-correct values
+/// where RaTeX differs (unterminated `\verb`, `x\limits^2` — errors;
+/// `\vcenter` — axis-centered ink). The script's `KATEX_OVERRIDES` documents
+/// them, and LayoutFixRegressionTests / ParserSpecTests / HardeningTests pin
+/// them (see README "Known limitations").
 @Suite("CoverageGolden")
 struct CoverageGoldenTests {
     struct Fixture: Decodable {

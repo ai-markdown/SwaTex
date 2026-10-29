@@ -10,6 +10,8 @@ private let nonStretchy: Set<String> = [
     "\\vec",
     "\\dot",
     "\\mathring",
+    "\\dddot",
+    "\\ddddot",
 ]
 
 func registerAccent(_ map: inout [String: FunctionSpec]) {
@@ -28,6 +30,8 @@ func registerAccent(_ map: inout [String: FunctionSpec]) {
             "\\vec",
             "\\dot",
             "\\mathring",
+            "\\dddot",
+            "\\ddddot",
             "\\widecheck",
             "\\widehat",
             "\\widetilde",

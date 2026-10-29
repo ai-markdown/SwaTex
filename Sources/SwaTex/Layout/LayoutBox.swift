@@ -159,13 +159,11 @@ public indirect enum BoxContent: Sendable {
     case angl(pathCommands: [PathCommand], body: LayoutBox)
 
     /// `\overline{body}`: body with a horizontal rule drawn above it.
-    /// The rule sits `2 * ruleThickness` above the body's top (clearance),
-    /// and is `ruleThickness` thick.
-    case overline(body: LayoutBox, ruleThickness: Double)
+    /// `offset` is the distance from the body's top to the rule center.
+    case overline(body: LayoutBox, ruleThickness: Double, offset: Double)
 
     /// `\underline{body}`: body with a horizontal rule drawn below it.
-    /// The rule sits `2 * ruleThickness` below the body's bottom (clearance),
-    /// and is `ruleThickness` thick.
+    /// `offset` is the distance from the body's bottom to the rule center.
     case underline(body: LayoutBox, ruleThickness: Double, offset: Double)
 
     /// Bussproofs-style proof tree with absolutely placed child boxes and
@@ -192,11 +190,15 @@ public struct ArrayLayout: Sendable {
     public var colAligns: [Character]
     public var rowHeights: [Double]
     public var rowDepths: [Double]
-    public var colGap: Double
+    /// Horizontal gap after each column (`colWidths.count - 1` entries): the
+    /// column's `postgap` plus the next column's `pregap`.
+    public var colGaps: [Double]
     public var offset: Double
     /// Extra x padding before the first column (= arraycolsep when
     /// hskipBeforeAndAfter is true).
     public var contentXOffset: Double
+    /// Extra x padding after the last column.
+    public var contentXEndOffset: Double
     /// For each column boundary (0 = before col 0, ..., numCols = after last
     /// col), the vertical rule separator type: nil = no rule,
     /// false = solid '|', true = dashed ':'.
@@ -222,8 +224,8 @@ public struct ArrayLayout: Sendable {
 
     public init(
         cells: [[LayoutBox]], colWidths: [Double], colAligns: [Character],
-        rowHeights: [Double], rowDepths: [Double], colGap: Double, offset: Double,
-        contentXOffset: Double = 0, colSeparators: [Bool?] = [],
+        rowHeights: [Double], rowDepths: [Double], colGaps: [Double], offset: Double,
+        contentXOffset: Double = 0, contentXEndOffset: Double = 0, colSeparators: [Bool?] = [],
         hlinesBeforeRow: [[Bool]] = [], ruleThickness: Double = 0.04,
         doubleRuleSep: Double = 0.2, arrayInnerWidth: Double = 0,
         tagGapEm: Double = 0, tagColWidth: Double = 0, rowTags: [LayoutBox?] = [],
@@ -234,9 +236,10 @@ public struct ArrayLayout: Sendable {
         self.colAligns = colAligns
         self.rowHeights = rowHeights
         self.rowDepths = rowDepths
-        self.colGap = colGap
+        self.colGaps = colGaps
         self.offset = offset
         self.contentXOffset = contentXOffset
+        self.contentXEndOffset = contentXEndOffset
         self.colSeparators = colSeparators
         self.hlinesBeforeRow = hlinesBeforeRow
         self.ruleThickness = ruleThickness

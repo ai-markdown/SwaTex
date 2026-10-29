@@ -152,36 +152,39 @@ func layoutOpWithLimits(
     let symbol: Bool
     let body: [ParseNode]?
     let suppressBaseShift: Bool
+    let isOperatorName: Bool
     switch baseNode.kind {
     case let .op(_, _, suppress, _, sym, n, b):
-        (name, symbol, body, suppressBaseShift) = (n, sym, b, suppress ?? false)
+        (name, symbol, body, suppressBaseShift, isOperatorName) =
+            (n, sym, b, suppress ?? false, false)
     case let .operatorName(b, _, _, _):
-        (name, symbol, body, suppressBaseShift) = (nil, false, b, false)
+        (name, symbol, body, suppressBaseShift, isOperatorName) = (nil, false, b, false, true)
     default:
         return layoutSupSub(baseNode, supNode, subNode, options, nil)
     }
 
-    // KaTeX-exact limit kerning (no +0.08em) for `\overset`/`\underset` only
-    // (`suppressBaseShift`).
-    let legacyLimitKernPadding = !suppressBaseShift
-
-    let (baseBox, slant) = buildOpBase(name, symbol, body, options)
+    // `\operatorname*` / `\operatornamewithlimits` keep their roman operator
+    // name; only symbol operators go through the large-operator base path.
+    let (baseBox, slant) =
+        isOperatorName
+        ? (layoutOperatorName(body ?? [], options), 0.0)
+        : buildOpBase(name, symbol, body, options)
     // baseShift only applies to symbol operators (KaTeX: base instanceof SymbolNode)
     let baseShift =
         symbol && !suppressBaseShift ? computeOpBaseShift(baseBox, options) : 0.0
 
     return layoutOpLimitsInner(
-        baseBox, supNode, subNode, slant, baseShift, legacyLimitKernPadding, options)
+        baseBox, supNode, subNode, slant, baseShift, !suppressBaseShift, options)
 }
 
 /// Assemble an operator with limits above/below (KaTeX's `assembleSupSub`).
 ///
-/// `legacyLimitKernPadding`: +0.08em on limit kerns for all ops except
-/// `\overset`/`\underset` (`.op(suppressBaseShift: true)`), matching KaTeX on
-/// `\dddot`/`\ddddot` PNGs.
+/// `includeDomStrut`: KaTeX's ordinary op-limits vlist carries a two-rule strut
+/// outside the visible limit gap; synthetic `\overset`/`\underset` operators
+/// (`.op(suppressBaseShift: true)`) do not.
 func layoutOpLimitsInner(
     _ base: LayoutBox, _ supNode: ParseNode?, _ subNode: ParseNode?,
-    _ slant: Double, _ baseShift: Double, _ legacyLimitKernPadding: Bool,
+    _ slant: Double, _ baseShift: Double, _ includeDomStrut: Bool,
     _ options: LayoutOptions
 ) -> LayoutBox {
     let metrics = options.metrics
@@ -191,28 +194,24 @@ func layoutOpLimitsInner(
     let supRatio = supStyle.sizeMultiplier / options.style.sizeMultiplier
     let subRatio = subStyle.sizeMultiplier / options.style.sizeMultiplier
 
-    let extraKern = legacyLimitKernPadding ? 0.08 : 0.0
-
     let supData: (elem: LayoutBox, kern: Double)? = supNode.map { s in
         let elem = layoutNode(s, options.with(style: supStyle))
-        // `\overset`/`\underset`: KaTeX `assembleSupSub` uses `elem.depth` as-is. Other
-        // limits (e.g. `\lim\limits_x`) keep the legacy `depth * supRatio` term so ink
-        // scores stay aligned with our KaTeX PNG fixtures.
-        let d = legacyLimitKernPadding ? elem.depth * supRatio : elem.depth
-        let kern = max(
-            metrics.bigOpSpacing1 + extraKern, metrics.bigOpSpacing3 - d + extraKern)
+        let kern = max(metrics.bigOpSpacing1, metrics.bigOpSpacing3 - elem.depth * supRatio)
         return (elem, kern)
     }
 
     let subData: (elem: LayoutBox, kern: Double)? = subNode.map { s in
         let elem = layoutNode(s, options.with(style: subStyle))
-        let h = legacyLimitKernPadding ? elem.height * subRatio : elem.height
-        let kern = max(
-            metrics.bigOpSpacing2 + extraKern, metrics.bigOpSpacing4 - h + extraKern)
+        let kern = max(metrics.bigOpSpacing2, metrics.bigOpSpacing4 - elem.height * subRatio)
         return (elem, kern)
     }
 
     let sp5 = metrics.bigOpSpacing5
+    // KaTeX's ordinary op-limits CSS vlist contributes a two-rule strut outside
+    // the visible limit gap. Keep the box extent separate from supKern/subKern:
+    // ink uses the font-derived kern above, while enclosing layout sees the same
+    // ascent/depth as the KaTeX DOM.
+    let limitStrut = includeDomStrut ? 2.0 * metrics.defaultRuleThickness : 0.0
 
     let totalHeight: Double
     let totalDepth: Double
@@ -228,8 +227,8 @@ func layoutOpLimitsInner(
 
         let bottom = sp5 + subH + subD + subKern + base.depth + baseShift
 
-        totalHeight = base.height - baseShift + supKern + supH + supD + sp5
-        totalDepth = bottom
+        totalHeight = base.height - baseShift + supKern + supH + supD + sp5 + limitStrut
+        totalDepth = bottom + limitStrut
         totalWidth = max(base.width, supElem.width * supRatio, subElem.width * subRatio)
     case let (nil, .some((subElem, subKern))):
         // Sub only: VList from top
@@ -238,7 +237,7 @@ func layoutOpLimitsInner(
         let subD = subElem.depth * subRatio
 
         totalHeight = base.height - baseShift
-        totalDepth = base.depth + baseShift + subKern + subH + subD + sp5
+        totalDepth = base.depth + baseShift + subKern + subH + subD + sp5 + limitStrut
         totalWidth = max(base.width, subElem.width * subRatio)
     case let (.some((supElem, supKern)), nil):
         // Sup only: VList from bottom
@@ -246,7 +245,7 @@ func layoutOpLimitsInner(
         let supH = supElem.height * supRatio
         let supD = supElem.depth * supRatio
 
-        totalHeight = base.height - baseShift + supKern + supH + supD + sp5
+        totalHeight = base.height - baseShift + supKern + supH + supD + sp5 + limitStrut
         totalDepth = base.depth + baseShift
         totalWidth = max(base.width, supElem.width * supRatio)
     case (nil, nil):

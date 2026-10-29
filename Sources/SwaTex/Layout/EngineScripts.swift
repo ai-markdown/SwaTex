@@ -198,9 +198,24 @@ func layoutSupSub(
     // (KaTeX `margin-right: italic`), so we must not add `glyphItalic` again here.
     let italicCorrection = 0.0
 
-    // KaTeX `supsub.js`: for SymbolNode bases, subscripts get `margin-left: -base.italic`
-    // so they are not shifted by the base's italic correction (e.g. ∫_{A_1}).
-    let subHKern = subBox != nil && !centerScripts ? -glyphItalic(baseBox) : 0.0
+    // KaTeX `supsub.js`: only a direct `SymbolNode` base (plus the synthetic `\oiint` /
+    // `\oiiint` operators) gets `margin-left: -base.italic`. In particular, spans such as
+    // `\text{\textit{CPI}}` and `{x}` must not inherit the italic correction of their last
+    // glyph.
+    let subHKern: Double
+    if subBox != nil && !centerScripts {
+        var isOiint = false
+        if let base, case let .op(_, _, _, _, _, name, _) = base.kind,
+            name == "\\oiint" || name == "\\oiiint"
+        {
+            isOiint = true
+        }
+        let baseItalic =
+            directGlyphItalic(baseBox) ?? (isOiint ? firstGlyphItalic(baseBox) : nil) ?? 0
+        subHKern = -baseItalic
+    } else {
+        subHKern = 0
+    }
 
     // Compute total dimensions (using scaled child dimensions)
     var height = baseBox.height

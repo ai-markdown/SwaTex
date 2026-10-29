@@ -272,22 +272,60 @@ func vertRepeatPieceHeight(isDouble: Bool) -> Double {
     return FontId.size1Regular.metrics(forChar: code).map { $0.height + $0.depth } ?? 0.5
 }
 
-/// Match KaTeX `realHeightTotal` for stack-always `|` / `\Vert` delimiters.
-func katexVertRealHeight(
-    _ requestedTotal: Double, isDouble: Bool, isSizedDelim: Bool
-) -> Double {
+/// Whether a stack-always vertical bar was requested by `\left`/`\right`
+/// (stretchy) or by `\big`…`\Bigg` (sized).
+enum VertDelimKind {
+    case stretchy
+    case sized
+}
+
+/// Fixed em scale of KaTeX's sized delimiter wrapper (`.katex` is 1.21em in the
+/// reference renderer): one suite-wide scale for `\big`…`\Bigg` bars instead of
+/// height-dependent multipliers.
+let katexSizedDelimScale = 1.2
+
+/// KaTeX `makeStackedDelim` geometry for stack-always `|` / `\Vert` delimiters.
+///
+/// Single source of truth for the SVG viewBox, TeX box bounds, and axis split, so
+/// the path is never scaled independently from the box that contains it.
+struct VertDelimGeometry {
+    var width: Double
+    var height: Double
+    var depth: Double
+    var viewBoxHeight: Int
+    var middleHeight: Int
+}
+
+func stackedVertGeometry(
+    _ requestedTotal: Double, isDouble: Bool, kind: VertDelimKind, _ options: LayoutOptions
+) -> VertDelimGeometry {
     let piece = vertRepeatPieceHeight(isDouble: isDouble)
-    let minH = 2 * piece
-    let repeatCount = max(((requestedTotal - minH) / piece).rounded(.up), 0)
-    var h = minH + repeatCount * piece
-    // KaTeX's sized vertical bars are CSS SVG spans with a slightly taller ink
-    // crop in browser screenshots than our native path rasterization. Keep this
-    // adjustment scoped to \big/\Big/\bigg/\Bigg so ordinary stretchy \left bars
-    // still follow content height directly.
-    if isSizedDelim && !isDouble {
-        h *= requestedTotal < 3.0 ? 1.2 : 1.135
-    }
-    return h
+    let minimumTotal = 2 * piece
+    let repeatCount = max(((requestedTotal - minimumTotal) / piece).rounded(.up), 0)
+    let logicalTotal = minimumTotal + repeatCount * piece
+    let axis = options.metrics.axisHeight
+    let logicalDepth = logicalTotal / 2 - axis
+    let logicalHeight = logicalTotal - logicalDepth
+    let scale = kind == .sized ? katexSizedDelimScale : 1.0
+    return VertDelimGeometry(
+        width: isDouble ? 0.556 : 0.333,
+        height: logicalHeight * scale,
+        depth: logicalDepth * scale,
+        viewBoxHeight: Int((logicalTotal * 1000).rounded()),
+        middleHeight: Int(((logicalTotal - minimumTotal) * 1000).rounded()))
+}
+
+/// Natural Main-Regular U+2223/U+2225 delimiter. KaTeX traverses the small-glyph
+/// sequence before choosing a stacked SVG; keeping the natural form as a glyph
+/// preserves its font hinting.
+func makeNaturalVertDelimBox(isDouble: Bool, _ options: LayoutOptions) -> LayoutBox {
+    let charCode: UInt32 = isDouble ? 8741 : 8739
+    let m = FontId.mainRegular.metrics(forChar: charCode)
+    return LayoutBox(
+        width: m?.width ?? (isDouble ? 0.5 : 0.27778), height: m?.height ?? 0.75,
+        depth: m?.depth ?? 0.25,
+        content: .glyph(fontId: .mainRegular, charCode: charCode),
+        color: options.color)
 }
 
 /// KaTeX `svgGeometry.tallDelim` paths for `"vert"` / `"doublevert"`
@@ -412,26 +450,17 @@ func makeMeasuredBySymbol(_ options: LayoutOptions) -> LayoutBox {
 /// (`vert` / `doublevert`). `totalHeight` is the requested full span in em
 /// (`sizeToMaxHeight` for `\big`/`\Big`/…).
 func makeVertDelimBox(
-    _ totalHeight: Double, isDouble: Bool, isSizedDelim: Bool, _ options: LayoutOptions
+    _ totalHeight: Double, isDouble: Bool, kind: VertDelimKind, _ options: LayoutOptions
 ) -> LayoutBox {
-    let realH = katexVertRealHeight(totalHeight, isDouble: isDouble, isSizedDelim: isSizedDelim)
-    let axis = options.metrics.axisHeight
-    let depth = max(realH / 2 - axis, 0)
-    let height = realH - depth
-    let width = isDouble ? 0.556 : 0.333
-
-    let piece = vertRepeatPieceHeight(isDouble: isDouble)
-    let midEm = max(realH - 2 * piece, 0)
-    let midTh = Int((midEm * 1000).rounded())
-    let viewBoxHeight = Int((realH * 1000).rounded())
-
-    let d = tallVertSvgPathData(midTh: midTh, isDouble: isDouble)
+    let geometry = stackedVertGeometry(totalHeight, isDouble: isDouble, kind: kind, options)
+    let d = tallVertSvgPathData(midTh: geometry.middleHeight, isDouble: isDouble)
     let raw = parseSvgPathData(d)
     let scaled = raw.scaled(by: 0.001)
-    let commands = mapVertPathYToBaseline(scaled, height, depth, viewBoxHeight)
+    let commands = mapVertPathYToBaseline(
+        scaled, geometry.height, geometry.depth, geometry.viewBoxHeight)
 
     return LayoutBox(
-        width: width, height: height, depth: depth,
+        width: geometry.width, height: geometry.height, depth: geometry.depth,
         content: .svgPath(commands: commands, fill: true),
         color: options.color)
 }
@@ -446,13 +475,18 @@ func makeStretchyDelim(
 
     // stackAlwaysDelimiters: use SVG path only when the required height exceeds
     // the natural font-glyph height (1.0em for single vert, same for double).
-    // When the content is small enough, fall through to the normal font glyph.
+    // Natural bars keep font hinting; stacked bars use the unified path/box
+    // geometry above.
     let vertNaturalHeight = naturalDelimHeightEm
-    if isVertDelim(delim) && totalHeight > vertNaturalHeight {
-        return makeVertDelimBox(totalHeight, isDouble: false, isSizedDelim: false, options)
+    if isVertDelim(delim) {
+        return totalHeight > vertNaturalHeight
+            ? makeVertDelimBox(totalHeight, isDouble: false, kind: .stretchy, options)
+            : makeNaturalVertDelimBox(isDouble: false, options)
     }
-    if isDoubleVertDelim(delim) && totalHeight > vertNaturalHeight {
-        return makeVertDelimBox(totalHeight, isDouble: true, isSizedDelim: false, options)
+    if isDoubleVertDelim(delim) {
+        return totalHeight > vertNaturalHeight
+            ? makeVertDelimBox(totalHeight, isDouble: true, kind: .stretchy, options)
+            : makeNaturalVertDelimBox(isDouble: true, options)
     }
 
     // Normalize < > to \langle \rangle for proper angle bracket glyphs
@@ -503,11 +537,11 @@ func layoutDelimSizing(_ size: UInt8, _ delim: String, _ options: LayoutOptions)
     // stackAlwaysDelimiters: render as SVG path at the fixed size height
     if isVertDelim(delim) {
         let total = sizeToMaxHeight[Int(min(size, 4))]
-        return makeVertDelimBox(total, isDouble: false, isSizedDelim: true, options)
+        return makeVertDelimBox(total, isDouble: false, kind: .sized, options)
     }
     if isDoubleVertDelim(delim) {
         let total = sizeToMaxHeight[Int(min(size, 4))]
-        return makeVertDelimBox(total, isDouble: true, isSizedDelim: true, options)
+        return makeVertDelimBox(total, isDouble: true, kind: .sized, options)
     }
 
     // Normalize angle brackets to proper math angle bracket glyphs
