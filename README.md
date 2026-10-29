@@ -183,7 +183,14 @@ between the engines. Every number is reproducible with the commands in
   math axis; `\gdef`/`\xdef` survive group exit; zero-arg delimited
   `\def` macros validate and consume their parameter text; `\middle`
   nested deeper than 8 `\left…\right` stretch scopes renders at natural
-  (unstretched) size.
+  (unstretched) size; `\cancel` strikes stay centered on their body; text
+  `---` uses the em-dash ligature width; U+FEFF is zero-width.
+- AI Markdown fork: layout tracks RaTeX v0.1.15. `DifferentialLayoutTests`
+  compares every display item against RaTeX v0.1.15 and widths against
+  KaTeX 0.16.47 over the 1,665-formula AI Markdown corpus
+  (`scripts/differential/`). Ink that KaTeX lets overflow its box (accents
+  wider than their base, `\mathclap` limits) is no longer widened into the
+  root advance; give hosts a little padding when clipping to bounds.
 - Shared with KaTeX/RaTeX upstream: `\begin{alignat}{N}` does not bound
   `N`; hostile inputs should be length-limited by the host app. Deeply
   nested input is guarded (recursion count + stack headroom → parse

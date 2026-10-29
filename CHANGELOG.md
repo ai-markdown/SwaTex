@@ -1,5 +1,41 @@
 # Changelog
 
+## Unreleased (AI Markdown fork)
+
+Layout parity with RaTeX v0.1.15. SwaTex 0.5.0 was ported from RaTeX
+v0.1.13; the following layout fixes from RaTeX v0.1.14–v0.1.15 are now
+ported, fixing formulas that rendered without error but with wrong geometry.
+
+### Fixed
+- Arrays honor each column's `pregap`/`postgap`, so `aligned`, `align`,
+  `alignat`, `alignedat`, and `split` with several column pairs keep KaTeX's
+  1em pair spacing instead of collapsing; align cells no longer cap
+  relation spacing; `\jot` is added between rows only (also in `CD`);
+  equation-number columns use KaTeX's 1.1em gap for compact tags.
+- Stretchy accents, arrows, and braces (`\overrightarrow`, `\underleftarrow`,
+  `\overleftrightarrow`, `\widehat`, `\utilde`, `\overbrace`, …) respect
+  KaTeX's minimum widths and share one clearance model; the base is centered
+  under wider marks.
+- Operator limits drop the legacy +0.08em kern and add KaTeX's two-rule
+  strut; `\operatorname*` keeps its roman name with limits.
+- Subscripts only cancel the italic correction of a direct glyph base (plus
+  `\oiint`/`\oiiint`).
+- `\overline`/`\underline`, link underlines, sized vertical bars, nested
+  `\tiny`…`\Huge`, `\dddot`/`\ddddot`, contextual `\dots`/`\cdots`/`\dotso`,
+  `\textnormal`/`\textup`/`\textmd`, enclosure border color, and `CD`
+  vertical arrows follow RaTeX v0.1.15 / KaTeX.
+- Root-level ink overflow no longer widens the display list (KaTeX box width).
+
+### Changed
+- `ArrayLayout.colGap` is replaced by per-boundary `colGaps` plus
+  `contentXEndOffset`; `BoxContent.overline` carries the rule offset;
+  `LayoutOptions` gains `explicitSizeMultiplier`.
+
+### Tests
+- Golden fixtures regenerated from RaTeX v0.1.15 (`scripts/regenerate_golden.py`).
+- New `DifferentialLayoutTests` over 1,665 AI Markdown formulas against
+  RaTeX v0.1.15 display lists and KaTeX 0.16.47 widths.
+
 ## 0.5.0 — 2026-07-22
 
 Performance and assurance release: the engine drops from 14.1 to

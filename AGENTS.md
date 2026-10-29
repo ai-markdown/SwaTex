@@ -19,7 +19,7 @@ This repository is the AI Markdown fork of [PhraseHQ/SwaTex](https://github.com/
 
 - Preserve upstream licenses, copyright notices, and meaningful source data, including multilingual fixtures.
 - Preserve `THIRD_PARTY_NOTICES.md` and the KaTeX font licenses (`OFL.txt`, `FONT_NOTICE.txt`) next to the bundled fonts.
-- Known maintenance items: silent mis-layout of multi-column `aligned`/`alignedat` environments and extensible arrows. Validate such fixes against RaTeX and KaTeX output, and add regression tests next to the existing golden tests.
+- Layout parity reference is RaTeX v0.1.15 (`5f7dc48`); KaTeX 0.16.47 is the behavioral reference. Golden fixtures are regenerated with `scripts/regenerate_golden.py`, and `DifferentialLayoutTests` compares full display lists over the AI Markdown corpus (`scripts/differential/`). Every intentional deviation from RaTeX must be listed with a reason in the corresponding script and justified against KaTeX; validate layout fixes against both references and add regression tests.
 - Write all new or modified development text in English, including documentation, code comments, diagnostics, log messages, test descriptions, and commit messages.
 - Keep the package buildable with Swift 6 language mode for iOS 26 and macOS 26 consumers, and keep ordinary builds independent of the AI Markdown workspace or external generators.
 - Keep upstream tests and add regression tests for each fix. Run checks appropriate to each change, and do not present historical results as new validation.
